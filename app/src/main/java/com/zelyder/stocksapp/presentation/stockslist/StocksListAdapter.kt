@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.zelyder.stocksapp.R
@@ -52,11 +53,14 @@ class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolde
                     },
                     stock.price.toString()
                 )
-
+            if(stock.dayDelta < 0) {
+                tvDayDelta.setTextColor(ContextCompat.getColor(itemView.context, R.color.red))
+            }
             tvDayDelta.text = stock.dayDelta.toString()
 
             if (stock.logo.isNotEmpty()) {
                 Picasso.get().load(stock.logo)
+                    .placeholder(R.drawable.ic_yndx)
                     .into(ivLogo)
             }
 

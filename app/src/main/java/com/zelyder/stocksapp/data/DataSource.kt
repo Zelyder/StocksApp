@@ -26,7 +26,7 @@ class DataSource {
             Stock(
                 "GOOGL",
                 "Alphabet Class A",
-                "https://finnhub.io/api/logo?symbol=GOOGL",
+                "${LOGO_BASE_URL}GOOGL",
                 1802f,
                 "eng",
                 0.12f
