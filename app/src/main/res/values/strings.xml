@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Stocks app</string>
+    <string name="currency_ru">%s ₽</string>
+    <string name="currency_eng">$%s</string>
 </resources>
