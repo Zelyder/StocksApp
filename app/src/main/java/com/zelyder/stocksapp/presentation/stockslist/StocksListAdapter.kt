@@ -1,15 +1,20 @@
 package com.zelyder.stocksapp.presentation.stockslist
 
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.zelyder.stocksapp.R
 import com.zelyder.stocksapp.domain.models.Stock
+import com.zelyder.stocksapp.presentation.core.toDeltaString
+import com.zelyder.stocksapp.presentation.core.toPriceString
+
 
 class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolder>() {
 
@@ -23,6 +28,11 @@ class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolde
     }
 
     override fun onBindViewHolder(holder: StocksViewHolder, position: Int) {
+        if (position % 2 != 0) {
+            val typedValue = TypedValue()
+            holder.cvItem.context.theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true)
+            holder.cvItem.setCardBackgroundColor(typedValue.data)
+        }
         holder.bind(stocks[position])
     }
 
@@ -34,6 +44,7 @@ class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolde
     }
 
     inner class StocksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val cvItem: CardView = itemView.findViewById(R.id.cvItem)
         private val tvTicker: TextView = itemView.findViewById(R.id.tvTicker)
         private val tvCompanyName: TextView = itemView.findViewById(R.id.tvCompanyName)
         private val tvCurrentPrice: TextView = itemView.findViewById(R.id.tvCurrentPrice)
@@ -44,19 +55,17 @@ class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolde
         fun bind(stock: Stock) {
             tvTicker.text = stock.ticker
             tvCompanyName.text = stock.companyName
-            tvCurrentPrice.text =
-                itemView.resources.getString(
-                    when (stock.currency) {
-                        "ru" -> R.string.currency_ru
-                        "eng" -> R.string.currency_eng
-                        else -> R.string.currency_eng
-                    },
-                    stock.price.toString()
-                )
-            if(stock.dayDelta < 0) {
+
+            tvCurrentPrice.text = toPriceString(stock.price, stock.currency, itemView.resources)
+            tvDayDelta.text = toDeltaString(
+                stock.dayDelta,
+                stock.dayDeltaPercent,
+                stock.currency,
+                itemView.resources
+            )
+            if (stock.dayDelta < 0) {
                 tvDayDelta.setTextColor(ContextCompat.getColor(itemView.context, R.color.red))
             }
-            tvDayDelta.text = stock.dayDelta.toString()
 
             if (stock.logo.isNotEmpty()) {
                 Picasso.get().load(stock.logo)
