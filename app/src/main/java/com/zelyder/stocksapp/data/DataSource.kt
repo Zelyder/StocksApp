@@ -12,7 +12,8 @@ class DataSource {
                 "https://finnhub.io/api/logo?symbol=YNDX",
                 4764.6f,
                 "ru",
-                55.0f
+                55.0f,
+                1.15f
             ),
             Stock(
                 "AAPL",
@@ -21,15 +22,17 @@ class DataSource {
                 131.93f,
                 "eng",
                 0.12f,
+                1.15f,
                 true
             ),
             Stock(
                 "GOOGL",
                 "Alphabet Class A",
-                "https://finnhub.io/api/logo?symbol=GOOGL",
+                "${LOGO_BASE_URL}GOOGL",
                 1802f,
                 "eng",
-                0.12f
+                0.12f,
+                1.15f
             ),
             Stock(
                 "AMZN",
@@ -37,7 +40,8 @@ class DataSource {
                 "https://finnhub.io/api/logo?symbol=AMZN",
                 3204f,
                 "eng",
-                -0.12f
+                -0.12f,
+                1.15f
             ),
             Stock(
                 "BAC",
@@ -45,7 +49,8 @@ class DataSource {
                 "https://finnhub.io/api/logo?symbol=BAC",
                 3204f,
                 "eng",
-                0.12f
+                0.12f,
+                1.15f
             ),
         )
     }

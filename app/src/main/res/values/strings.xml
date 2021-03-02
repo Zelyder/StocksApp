@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Stocks app</string>
-    <string name="currency_ru">%s ₽</string>
-    <string name="currency_eng">$%s</string>
+    <string name="currency_ru">%.2f ₽</string>
+    <string name="currency_eng">$%.2f</string>
+    <string name="delta_ru">%.2f₽ (%.2f%%)</string>
+    <string name="delta_eng">$%.2f (%.2f%%)</string>
 </resources>

@@ -9,10 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zelyder.stocksapp.R
 import com.zelyder.stocksapp.data.DataSource
+import com.zelyder.stocksapp.viewModelFactoryProvider
 
 class StocksListFragment : Fragment() {
 
     private var recyclerView: RecyclerView? = null
+
+    private val viewModel: StocksListViewModel by lazy { viewModelFactoryProvider()
+        .viewModelFactory().create(StocksListViewModel::class.java)}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,8 +30,19 @@ class StocksListFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.rvStocks)
         recyclerView?.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
-        recyclerView?.adapter = StocksListAdapter().also { it.bindStocks(DataSource.getStocks()) }
+        recyclerView?.adapter = StocksListAdapter()
 
+        viewModel.stocksList.observe(this.viewLifecycleOwner, {
+            (recyclerView?.adapter as? StocksListAdapter)?.apply {
+                bindStocks(it)
+            }
+        })
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.updateList()
     }
 
     override fun onDestroyView() {
