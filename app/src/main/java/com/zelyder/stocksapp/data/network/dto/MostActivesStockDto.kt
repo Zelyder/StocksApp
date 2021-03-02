@@ -9,8 +9,8 @@ data class MostActivesStockDto(
     val currency: String = "",
     @SerialName("regularMarketPrice")
     val regularMarketPrice: Float = 0.0f,
-    @SerialName("postMarketPrice")
-    val postMarketPrice: Float = 0.0f,
+    @SerialName("regularMarketChange")
+    val regularMarketChange: Float = 0.0f,
     @SerialName("regularMarketChangePercent")
     val regularMarketChangePercent: Float = 0.0f,
     @SerialName("shortName")
