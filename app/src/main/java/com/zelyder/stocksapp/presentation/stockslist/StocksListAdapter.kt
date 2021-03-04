@@ -16,7 +16,7 @@ import com.zelyder.stocksapp.presentation.core.toDeltaString
 import com.zelyder.stocksapp.presentation.core.toPriceString
 
 
-class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolder>() {
+class StocksListAdapter(private val itemClickListener: StockListItemClickListener) : RecyclerView.Adapter<StocksListAdapter.StocksViewHolder>() {
 
     private var stocks = listOf<Stock>()
 
@@ -34,6 +34,8 @@ class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolde
             holder.cvItem.setCardBackgroundColor(typedValue.data)
         }
         holder.bind(stocks[position])
+
+
     }
 
     override fun getItemCount(): Int = stocks.size
@@ -73,8 +75,18 @@ class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolde
                     .into(ivLogo)
             }
 
+            switchFav(stock.isFavorite)
+
+            ivFav.setOnClickListener {
+                stock.isFavorite = !stock.isFavorite
+                switchFav(stock.isFavorite)
+                itemClickListener.onClickFavourite(stock.ticker, stock.isFavorite)
+            }
+        }
+
+        private fun switchFav(isFavorite: Boolean) {
             ivFav.setImageResource(
-                when (stock.isFavorite) {
+                when (isFavorite) {
                     true -> R.drawable.ic_fav_active
                     false -> R.drawable.ic_fav_none
                 }

@@ -24,4 +24,10 @@ class StocksListViewModel(private val stocksListRepository: StocksListRepository
             _stocksList.value = stocksListRepository.getStocksAsync()
         }
     }
+
+    fun updateFavState(ticker: String, isFavorite: Boolean){
+        viewModelScope.launch(coroutineExceptionHandler)  {
+            stocksListRepository.updateStocksIsFavoriteAsync(ticker, isFavorite)
+        }
+    }
 }

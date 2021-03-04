@@ -29,4 +29,8 @@ class StocksListRepositoryImpl(
         stocks
 //        DataSource.getStocks()
     }
+
+    override suspend fun updateStocksIsFavoriteAsync(ticker: String, isFavorite: Boolean) {
+        localDataSource.updateStockIsFavorite(ticker, isFavorite)
+    }
 }
