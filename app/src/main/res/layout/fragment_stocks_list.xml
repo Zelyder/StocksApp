@@ -24,9 +24,9 @@
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:queryHint="Search restaurants"
                 app:defaultQueryHint="@string/search_hint"
                 app:searchHintIcon="@drawable/ic_search"
+                app:searchIcon="@drawable/ic_search"
                 app:iconifiedByDefault="false"
                 android:theme="@style/AppSearchView"
                 android:layout_marginTop="16dp"/>
