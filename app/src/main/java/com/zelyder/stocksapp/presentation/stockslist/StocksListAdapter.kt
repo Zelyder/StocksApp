@@ -32,6 +32,10 @@ class StocksListAdapter(private val itemClickListener: StockListItemClickListene
             val typedValue = TypedValue()
             holder.cvItem.context.theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true)
             holder.cvItem.setCardBackgroundColor(typedValue.data)
+        }else {
+            val typedValue = TypedValue()
+            holder.cvItem.context.theme.resolveAttribute(R.attr.cardBackgroundColor, typedValue, true)
+            holder.cvItem.setCardBackgroundColor(typedValue.data)
         }
         holder.bind(stocks[position])
 
@@ -67,6 +71,8 @@ class StocksListAdapter(private val itemClickListener: StockListItemClickListene
             )
             if (stock.dayDelta < 0) {
                 tvDayDelta.setTextColor(ContextCompat.getColor(itemView.context, R.color.red))
+            } else {
+                tvDayDelta.setTextColor(ContextCompat.getColor(itemView.context, R.color.green))
             }
 
             if (stock.logo.isNotEmpty()) {
