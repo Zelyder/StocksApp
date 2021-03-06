@@ -4,4 +4,8 @@
     <string name="currency_eng">$%.2f</string>
     <string name="delta_ru">%.2f₽ (%.2f%%)</string>
     <string name="delta_eng">$%.2f (%.2f%%)</string>
+    <string name="tv_stocks_text">Stocks</string>
+    <string name="tv_favourite_text">Favourite</string>
+    <string name="search_hint">Find company or ticker</string>
+
 </resources>

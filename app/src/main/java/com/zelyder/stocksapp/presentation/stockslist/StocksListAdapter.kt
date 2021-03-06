@@ -16,7 +16,7 @@ import com.zelyder.stocksapp.presentation.core.toDeltaString
 import com.zelyder.stocksapp.presentation.core.toPriceString
 
 
-class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolder>() {
+class StocksListAdapter(private val itemClickListener: StockListItemClickListener) : RecyclerView.Adapter<StocksListAdapter.StocksViewHolder>() {
 
     private var stocks = listOf<Stock>()
 
@@ -32,8 +32,14 @@ class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolde
             val typedValue = TypedValue()
             holder.cvItem.context.theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true)
             holder.cvItem.setCardBackgroundColor(typedValue.data)
+        }else {
+            val typedValue = TypedValue()
+            holder.cvItem.context.theme.resolveAttribute(R.attr.cardBackgroundColor, typedValue, true)
+            holder.cvItem.setCardBackgroundColor(typedValue.data)
         }
         holder.bind(stocks[position])
+
+
     }
 
     override fun getItemCount(): Int = stocks.size
@@ -65,6 +71,8 @@ class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolde
             )
             if (stock.dayDelta < 0) {
                 tvDayDelta.setTextColor(ContextCompat.getColor(itemView.context, R.color.red))
+            } else {
+                tvDayDelta.setTextColor(ContextCompat.getColor(itemView.context, R.color.green))
             }
 
             if (stock.logo.isNotEmpty()) {
@@ -73,8 +81,18 @@ class StocksListAdapter : RecyclerView.Adapter<StocksListAdapter.StocksViewHolde
                     .into(ivLogo)
             }
 
+            switchFav(stock.isFavorite)
+
+            ivFav.setOnClickListener {
+                stock.isFavorite = !stock.isFavorite
+                switchFav(stock.isFavorite)
+                itemClickListener.onClickFavourite(stock.ticker, stock.isFavorite)
+            }
+        }
+
+        private fun switchFav(isFavorite: Boolean) {
             ivFav.setImageResource(
-                when (stock.isFavorite) {
+                when (isFavorite) {
                     true -> R.drawable.ic_fav_active
                     false -> R.drawable.ic_fav_none
                 }

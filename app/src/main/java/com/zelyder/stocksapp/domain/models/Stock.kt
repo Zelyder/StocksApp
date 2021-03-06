@@ -8,5 +8,5 @@ data class Stock (
     val currency: String = "",
     val dayDelta: Float = 0.0f,
     val dayDeltaPercent: Float = 0.0f,
-    val isFavorite: Boolean = false
+    var isFavorite: Boolean = false
 )

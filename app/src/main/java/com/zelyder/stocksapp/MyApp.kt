@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
 import com.zelyder.stocksapp.data.network.StocksNetworkModule
+import com.zelyder.stocksapp.data.storage.db.StocksDb
+import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSourceImpl
 import com.zelyder.stocksapp.domain.datasources.StocksRemoteDataSourceImpl
 import com.zelyder.stocksapp.domain.repositories.StocksListRepository
 import com.zelyder.stocksapp.domain.repositories.StocksListRepositoryImpl
@@ -30,8 +32,9 @@ class MyApp: Application(), ViewModelFactoryProvider {
     private fun initRepositories() {
 
         val remoteDataSource = StocksRemoteDataSourceImpl(StocksNetworkModule().mboumApi())
+        val localDataSource = StocksLocalDataSourceImpl(StocksDb.create(applicationContext))
 
-        stocksListRepository = StocksListRepositoryImpl(remoteDataSource)
+        stocksListRepository = StocksListRepositoryImpl(remoteDataSource,localDataSource)
     }
 
     override fun viewModelFactory(): ViewModelFactory = viewModelFactory
