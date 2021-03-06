@@ -11,13 +11,15 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class StocksListViewModel(private val stocksListRepository: StocksListRepository) : ViewModel() {
-    private  val coroutineExceptionHandler = CoroutineExceptionHandler {_, throwable ->
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         Log.e(this::class.java.simpleName, "CoroutineExceptionHandler:$throwable")
     }
 
     private val _stocksList = MutableLiveData<List<Stock>>()
+    private val _isFavSelected = MutableLiveData<Boolean?>()
 
     val stocksList: LiveData<List<Stock>> get() = _stocksList
+    val isFavSelected: LiveData<Boolean?> get() = _isFavSelected
 
     fun updateList() {
         viewModelScope.launch(coroutineExceptionHandler) {
@@ -25,9 +27,26 @@ class StocksListViewModel(private val stocksListRepository: StocksListRepository
         }
     }
 
-    fun updateFavState(ticker: String, isFavorite: Boolean){
-        viewModelScope.launch(coroutineExceptionHandler)  {
+    fun swapToStocksTab() {
+        if (_isFavSelected.value == true) {
+            _isFavSelected.value = false
+            updateList()
+        }
+    }
+
+    fun updateFavState(ticker: String, isFavorite: Boolean) {
+
+        viewModelScope.launch(coroutineExceptionHandler) {
             stocksListRepository.updateStocksIsFavoriteAsync(ticker, isFavorite)
+        }
+    }
+
+    fun swapToFavTab() {
+        if (_isFavSelected.value == false || _isFavSelected.value == null) {
+            _isFavSelected.value = true
+            viewModelScope.launch(coroutineExceptionHandler) {
+                _stocksList.value = stocksListRepository.getFavoritesAsync()
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.zelyder.stocksapp.domain.datasources
 
 import com.zelyder.stocksapp.data.storage.db.StocksDb
+import com.zelyder.stocksapp.data.storage.entities.FavoriteEntity
 import com.zelyder.stocksapp.data.storage.entities.StockEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,7 +11,7 @@ class StocksLocalDataSourceImpl(private val stocksDb: StocksDb): StocksLocalData
         stocksDb.stocksDao().getAllStocks()
     }
 
-    override suspend fun getStockByTicker(ticker: String) {
+    override suspend fun getStockByTicker(ticker: String):StockEntity = withContext(Dispatchers.IO){
         stocksDb.stocksDao().getStockByTicker(ticker)
     }
 
@@ -36,5 +37,17 @@ class StocksLocalDataSourceImpl(private val stocksDb: StocksDb): StocksLocalData
 
     override suspend fun deleteAllStocks() = withContext(Dispatchers.IO){
         stocksDb.stocksDao().deleteAll()
+    }
+
+    override suspend fun getFavoritesStocks(): List<FavoriteEntity> = withContext(Dispatchers.IO){
+        stocksDb.favoriteDao().getAllStocks()
+    }
+
+    override suspend fun addFavoriteStock(stock: FavoriteEntity) = withContext(Dispatchers.IO){
+        stocksDb.favoriteDao().addStock(stock)
+    }
+
+    override suspend fun deleteFavoriteStockByTicker(ticker: String) = withContext(Dispatchers.IO){
+        stocksDb.favoriteDao().deleteByTicker(ticker)
     }
 }

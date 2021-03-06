@@ -16,4 +16,8 @@ object DbContract {
         const val COLUMN_NAME_FAVORITE = "isFavorite"
     }
 
+    object Favorites {
+        const val  TABLE_NAME = "favorite"
+    }
+
 }
