@@ -1,8 +1,8 @@
 package com.zelyder.stocksapp.data.mappers
 
 import com.zelyder.stocksapp.data.LOGO_BASE_URL
-import com.zelyder.stocksapp.data.network.dto.MostActivesStockDto
-import com.zelyder.stocksapp.data.network.dto.MostActivesStocksDto
+import com.zelyder.stocksapp.data.network.dto.finnhub.FoundStockDto
+import com.zelyder.stocksapp.data.network.dto.mboum.MostActivesStockDto
 import com.zelyder.stocksapp.data.storage.entities.FavoriteEntity
 import com.zelyder.stocksapp.data.storage.entities.StockEntity
 import com.zelyder.stocksapp.domain.models.Stock
@@ -71,4 +71,9 @@ fun FavoriteEntity.toStock() = Stock(
         dayDelta = this.dayDelta,
         dayDeltaPercent = this.dayDeltaPercent,
         isFavorite = this.isFavorite
+)
+
+fun FoundStockDto.toStock() = Stock(
+        ticker = symbol,
+        companyName = description
 )

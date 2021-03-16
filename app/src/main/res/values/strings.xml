@@ -7,5 +7,7 @@
     <string name="tv_stocks_text">Stocks</string>
     <string name="tv_favourite_text">Favourite</string>
     <string name="search_hint">Find company or ticker</string>
+    <string name="tv_popular_requests_text">Popular requests</string>
+    <string name="tv_recently_searched_text">You’ve searched for this</string>
 
 </resources>

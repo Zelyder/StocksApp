@@ -1,4 +1,4 @@
-package com.zelyder.stocksapp.data.network.dto
+package com.zelyder.stocksapp.data.network.dto.mboum
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

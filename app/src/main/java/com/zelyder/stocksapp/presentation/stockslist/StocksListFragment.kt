@@ -2,12 +2,13 @@ package com.zelyder.stocksapp.presentation.stockslist
 
 import android.os.Bundle
 import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
     private var recyclerView: RecyclerView? = null
     private var tvStocks: TextView? = null
     private var tvFavorites: TextView? = null
+    private var searchView: SearchView? = null
 
 
     private val viewModel: StocksListViewModel by viewModels { viewModelFactoryProvider()
@@ -38,8 +40,13 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         recyclerView = view.findViewById(R.id.rvStocks)
         tvStocks = view.findViewById(R.id.tvStocks)
         tvFavorites = view.findViewById(R.id.tvFavourite)
+        searchView = view.findViewById(R.id.searchView)
 
-        recyclerView?.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
+        recyclerView?.layoutManager = LinearLayoutManager(
+            view.context,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         recyclerView?.adapter = StocksListAdapter(this)
 
         viewModel.stocksList.observe(this.viewLifecycleOwner, {
@@ -63,6 +70,17 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         tvFavorites?.setOnClickListener {
             viewModel.swapToFavTab()
         }
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(s: String): Boolean {
+                viewModel.searchStock(s)
+                return true
+            }
+
+            override fun onQueryTextChange(s: String): Boolean {
+                return false
+            }
+        })
+
 
     }
 

@@ -1,21 +1,22 @@
 package com.zelyder.stocksapp.domain.repositories
 
-import com.zelyder.stocksapp.data.DataSource
 import com.zelyder.stocksapp.data.LOGO_BASE_URL
 import com.zelyder.stocksapp.data.mappers.toEntity
 import com.zelyder.stocksapp.data.mappers.toFavoriteStock
 import com.zelyder.stocksapp.data.mappers.toStock
 import com.zelyder.stocksapp.data.mappers.toStockEntity
+import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSource
-import com.zelyder.stocksapp.domain.datasources.StocksRemoteDataSource
+import com.zelyder.stocksapp.domain.datasources.StocksMboumDataSource
 import com.zelyder.stocksapp.domain.models.Stock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.round
 
 class StocksListRepositoryImpl(
-        private val remoteDataSource: StocksRemoteDataSource,
-        private val localDataSource: StocksLocalDataSource
+    private val mboumDataSource: StocksMboumDataSource,
+    private val finnhubDataSource: StocksFinnhubDataSource,
+    private val localDataSource: StocksLocalDataSource
 ) : StocksListRepository {
     override suspend fun getStocksAsync(forceRefresh: Boolean): List<Stock> = withContext(Dispatchers.IO) {
 
@@ -24,7 +25,7 @@ class StocksListRepositoryImpl(
         var stocks = localDataSource.getStocksAsync().map { it.toStock() }
 
         if(forceRefresh || stocks.isEmpty()) {
-            stocks = remoteDataSource.getMostActivesStocks().stocks.map { it.toStock() }
+            stocks = mboumDataSource.getMostActivesStocks().stocks.map { it.toStock() }
             localDataSource.saveStocks(stocks.map { it.toEntity() })
         }
 
@@ -45,5 +46,9 @@ class StocksListRepositoryImpl(
 
     override suspend fun getFavoritesAsync(): List<Stock> = withContext(Dispatchers.IO) {
         localDataSource.getFavoritesStocks().map { it.toStock() }
+    }
+
+    override suspend fun searchStock(query: String): List<Stock> = withContext(Dispatchers.IO){
+        finnhubDataSource.searchStock(query).foundStocks.map { it.toStock() }
     }
 }

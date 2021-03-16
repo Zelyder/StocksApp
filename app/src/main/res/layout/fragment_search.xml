@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.searchscreen.SearchFragment">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:defaultQueryHint="@string/search_hint"
+        app:searchHintIcon="@drawable/ic_search"
+        app:searchIcon="@drawable/ic_search"
+        app:iconifiedByDefault="false"
+        android:theme="@style/AppSearchView"
+        android:background="@drawable/search_bg_submit"
+        android:layout_marginTop="16dp">
+
+    </androidx.appcompat.widget.SearchView>
+
+
+    <TextView
+        android:id="@+id/tvPopularRequests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_popular_requests_text"
+        android:layout_marginTop="32dp"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cgPopularRequests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <TextView
+        android:id="@+id/tvRecentlySearched"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_recently_searched_text"
+        android:textStyle="bold"
+        android:layout_marginTop="28dp"
+        android:textSize="18sp" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cgRecentlySearched"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+</LinearLayout>

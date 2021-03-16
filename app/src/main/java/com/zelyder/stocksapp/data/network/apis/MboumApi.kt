@@ -1,9 +1,8 @@
 package com.zelyder.stocksapp.data.network.apis
 
 import com.zelyder.stocksapp.data.MBOUM_API_KEY
-import com.zelyder.stocksapp.data.network.dto.MostActivesStocksDto
-import com.zelyder.stocksapp.data.network.dto.TrendingStocksDto
-import kotlinx.serialization.json.JsonArray
+import com.zelyder.stocksapp.data.network.dto.mboum.MostActivesStocksDto
+import com.zelyder.stocksapp.data.network.dto.mboum.TrendingStocksDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
