@@ -10,6 +10,7 @@ import com.zelyder.stocksapp.domain.repositories.SearchRepository
 import com.zelyder.stocksapp.domain.repositories.StocksListRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import java.util.*
 
 class SearchViewModel(private val searchRepository: SearchRepository): ViewModel() {
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -22,14 +23,14 @@ class SearchViewModel(private val searchRepository: SearchRepository): ViewModel
 
     fun searchStock(query: String) {
         viewModelScope.launch(coroutineExceptionHandler) {
-            _stocksList.value = searchRepository.searchStock(query)
+            _stocksList.value = searchRepository.searchStock(query.toUpperCase(Locale.ROOT))
         }
     }
 
 
-    fun updateFavState(ticker: String, isFavorite: Boolean) {
+    fun updateFavState(stock: Stock) {
         viewModelScope.launch(coroutineExceptionHandler) {
-            searchRepository.updateStocksIsFavoriteAsync(ticker, isFavorite)
+            searchRepository.updateStocksIsFavoriteAsync(stock)
         }
     }
 }

@@ -6,27 +6,27 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class StockInfoDto (
     @SerialName("country")
-    val country: String? = null,
+    val country: String = "",
     @SerialName("currency")
-    val currency: String? = null,
+    val currency: String = "",
     @SerialName("exchange")
-    val exchange: String? = null,
+    val exchange: String = "",
     @SerialName("ipo")
-    val ipo: String? = null,
+    val ipo: String = "",
     @SerialName("marketCapitalization")
-    val marketCapitalization: Long? = null,
+    val marketCapitalization: Long = 0L,
     @SerialName("name")
-    val name: String? = null,
+    val name: String = "",
     @SerialName("phone")
-    val phone: String? = null,
+    val phone: String = "",
     @SerialName("shareOutstanding")
-    val shareOutstanding: Double? = null,
+    val shareOutstanding: Double = 0.0,
     @SerialName("ticker")
-    val ticker: String? = null,
+    val ticker: String = "",
     @SerialName("weburl")
-    val weburl: String? = null,
+    val weburl: String = "",
     @SerialName("logo")
-    val logo: String? = null,
+    val logo: String = "",
     @SerialName("finnhubIndustry")
-    val finnhubIndustry: String? = null
+    val finnhubIndustry: String = ""
 )

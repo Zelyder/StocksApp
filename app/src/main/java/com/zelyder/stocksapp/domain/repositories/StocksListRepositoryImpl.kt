@@ -17,35 +17,32 @@ class StocksListRepositoryImpl(
     private val mboumDataSource: StocksMboumDataSource,
     private val localDataSource: StocksLocalDataSource
 ) : StocksListRepository {
-    override suspend fun getStocksAsync(forceRefresh: Boolean): List<Stock> = withContext(Dispatchers.IO) {
+    override suspend fun getStocksAsync(forceRefresh: Boolean): List<Stock> =
+        withContext(Dispatchers.IO) {
 
+            var stocks = localDataSource.getStocksAsync().map { it.toStock() }
 
+            if (forceRefresh || stocks.isEmpty()) {
+                stocks = mboumDataSource.getMostActivesStocks().stocks.map { it.toStock() }
+                localDataSource.saveStocks(stocks.map { it.toEntity() })
+            }
 
-        var stocks = localDataSource.getStocksAsync().map { it.toStock() }
-
-        if(forceRefresh || stocks.isEmpty()) {
-            stocks = mboumDataSource.getMostActivesStocks().stocks.map { it.toStock() }
-            localDataSource.saveStocks(stocks.map { it.toEntity() })
+            stocks
+//        DataSource.getStocks()
         }
 
-        stocks
-//        DataSource.getStocks()
-    }
-
-    override suspend fun updateStocksIsFavoriteAsync(ticker: String, isFavorite: Boolean) = withContext(Dispatchers.IO) {
-        localDataSource.updateStockIsFavorite(ticker, isFavorite)
-        //FIXME: don't adding favorite form main list
-        val favStock = localDataSource.getFavoriteStockByTicker(ticker)
-        if (isFavorite){
-            localDataSource.addFavoriteStock(favStock)
+    override suspend fun updateStocksIsFavoriteAsync(stock: Stock) = withContext(Dispatchers.IO) {
+        localDataSource.updateStockIsFavorite(stock.ticker, stock.isFavorite)
+        if (stock.isFavorite) {
+            localDataSource.addFavoriteStock(stock.toFavoriteStock())
         } else {
-            localDataSource.deleteFavoriteStockByTicker(ticker)
+            localDataSource.deleteFavoriteStockByTicker(stock.ticker)
         }
 
     }
 
     override suspend fun getFavoritesAsync(): List<Stock> = withContext(Dispatchers.IO) {
-        localDataSource.getFavoritesStocks().map { it.toStock() }
+        localDataSource.getFavoritesStocks()?.map { it.toStock() } ?: listOf()
     }
 
 }

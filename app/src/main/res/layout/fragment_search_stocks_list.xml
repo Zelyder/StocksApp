@@ -6,6 +6,15 @@
     android:orientation="vertical"
     tools:context=".presentation.searchscreen.SearchStocksListFragment">
 
+    <ProgressBar
+        android:id="@+id/pbSearch"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressTint="?attr/colorAccent"
+        android:indeterminate="true"
+        android:secondaryProgressTint="?attr/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/tvStocksSearch"
         android:layout_width="match_parent"

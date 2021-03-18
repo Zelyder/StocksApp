@@ -4,5 +4,5 @@ import com.zelyder.stocksapp.domain.models.Stock
 
 interface SearchRepository {
     suspend fun searchStock(query: String): List<Stock>
-    suspend fun updateStocksIsFavoriteAsync(ticker: String, isFavorite: Boolean)
+    suspend fun updateStocksIsFavoriteAsync(stock: Stock)
 }

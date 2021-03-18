@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FoundStockDto (
     @SerialName("description")
-    val description: String,
+    val description: String = "",
     @SerialName("displaySymbol")
-    val displaySymbol: String,
+    val displaySymbol: String = "",
     @SerialName("symbol")
-    val symbol: String,
+    val symbol: String = "",
     @SerialName("type")
-    val type: String?
+    val type: String = ""
 )

@@ -5,11 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zelyder.stocksapp.R
+import com.zelyder.stocksapp.domain.models.Stock
 import com.zelyder.stocksapp.presentation.stockslist.StockListItemClickListener
 import com.zelyder.stocksapp.presentation.stockslist.StocksListAdapter
 import com.zelyder.stocksapp.presentation.stockslist.StocksListViewModel
@@ -23,6 +25,7 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
     }
 
     private var recyclerView: RecyclerView? = null
+    private var pbSearch: ProgressBar? = null
 
 
     override fun onCreateView(
@@ -36,6 +39,8 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView = view.findViewById(R.id.rvStocksSearch)
+        pbSearch = view.findViewById(R.id.pbSearch)
+
         recyclerView?.layoutManager = LinearLayoutManager(
             view.context,
             LinearLayoutManager.VERTICAL,
@@ -46,9 +51,17 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
         viewModel.stocksList.observe(this.viewLifecycleOwner) {
             (recyclerView?.adapter as? StocksListAdapter)?.apply {
                 bindStocks(it)
+                pbSearch?.isVisible = false
             }
         }
         arguments?.getString(KEY_QUERY)?.let { viewModel.searchStock(it) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recyclerView = null
+        pbSearch = null
+
     }
 
     companion object {
@@ -61,8 +74,8 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
         }
     }
 
-    override fun onClickFavourite(ticker: String, isFavorite: Boolean) {
-        viewModel.updateFavState(ticker, isFavorite)
+    override fun onClickFavourite(stock: Stock) {
+        viewModel.updateFavState(stock)
     }
 }
 

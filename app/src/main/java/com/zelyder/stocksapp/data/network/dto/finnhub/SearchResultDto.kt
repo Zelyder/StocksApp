@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchResultDto (
     @SerialName("count")
-    val count: Long,
+    val count: Long = 0L,
     @SerialName("result")
-    val foundStocks: List<FoundStockDto>
+    val foundStocks: List<FoundStockDto> = listOf()
 )
