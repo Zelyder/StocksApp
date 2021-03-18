@@ -52,7 +52,7 @@ class SearchFragment : Fragment() {
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.search_container, SearchStocksListFragment())
+                    .replace(R.id.search_container, SearchStocksListFragment.newInstance(s))
                     .commit()
                 return true
             }

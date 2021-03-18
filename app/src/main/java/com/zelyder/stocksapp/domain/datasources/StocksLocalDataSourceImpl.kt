@@ -39,6 +39,10 @@ class StocksLocalDataSourceImpl(private val stocksDb: StocksDb): StocksLocalData
         stocksDb.stocksDao().deleteAll()
     }
 
+    override suspend fun getFavoriteStockByTicker(ticker: String): FavoriteEntity  = withContext(Dispatchers.IO){
+        stocksDb.favoriteDao().getStockByTicker(ticker)
+    }
+
     override suspend fun getFavoritesStocks(): List<FavoriteEntity> = withContext(Dispatchers.IO){
         stocksDb.favoriteDao().getAllStocks()
     }

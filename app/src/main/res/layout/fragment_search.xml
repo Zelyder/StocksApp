@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
     tools:context=".presentation.searchscreen.SearchFragment">
 
     <androidx.appcompat.widget.SearchView
@@ -14,6 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/search_bg_submit"
         android:theme="@style/AppSearchView"
         app:defaultQueryHint="@string/search_hint"

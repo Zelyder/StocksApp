@@ -49,10 +49,4 @@ class StocksListViewModel(private val stocksListRepository: StocksListRepository
             }
         }
     }
-
-    fun searchStock(query: String) {
-        viewModelScope.launch(coroutineExceptionHandler) {
-            _stocksList.value = stocksListRepository.searchStock(query)
-        }
-    }
 }

@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,19 +53,19 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         )
         recyclerView?.adapter = StocksListAdapter(this)
 
-        viewModel.stocksList.observe(this.viewLifecycleOwner, {
+        viewModel.stocksList.observe(this.viewLifecycleOwner) {
             (recyclerView?.adapter as? StocksListAdapter)?.apply {
                 bindStocks(it)
             }
-        })
+        }
 
         if (savedInstanceState == null) {
             viewModel.updateList()
         }
 
-        viewModel.isFavSelected.observe(this.viewLifecycleOwner, { isFavSelected ->
+        viewModel.isFavSelected.observe(this.viewLifecycleOwner) { isFavSelected ->
             isFavSelected?.let { swapTab(it) }
-        })
+        }
 
         tvStocks?.setOnClickListener {
             viewModel.swapToStocksTab()
@@ -80,16 +81,16 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
             }
         }
 
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(s: String): Boolean {
-                viewModel.searchStock(s)
-                return true
-            }
-
-            override fun onQueryTextChange(s: String): Boolean {
-                return false
-            }
-        })
+//        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(s: String): Boolean {
+//                viewModel.searchStock(s)
+//                return true
+//            }
+//
+//            override fun onQueryTextChange(s: String): Boolean {
+//                return false
+//            }
+//        })
 
 
     }

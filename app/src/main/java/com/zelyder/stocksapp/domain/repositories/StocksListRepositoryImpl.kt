@@ -15,7 +15,6 @@ import kotlin.math.round
 
 class StocksListRepositoryImpl(
     private val mboumDataSource: StocksMboumDataSource,
-    private val finnhubDataSource: StocksFinnhubDataSource,
     private val localDataSource: StocksLocalDataSource
 ) : StocksListRepository {
     override suspend fun getStocksAsync(forceRefresh: Boolean): List<Stock> = withContext(Dispatchers.IO) {
@@ -35,7 +34,8 @@ class StocksListRepositoryImpl(
 
     override suspend fun updateStocksIsFavoriteAsync(ticker: String, isFavorite: Boolean) = withContext(Dispatchers.IO) {
         localDataSource.updateStockIsFavorite(ticker, isFavorite)
-        val favStock = localDataSource.getStockByTicker(ticker).toFavoriteStock()
+        //FIXME: don't adding favorite form main list
+        val favStock = localDataSource.getFavoriteStockByTicker(ticker)
         if (isFavorite){
             localDataSource.addFavoriteStock(favStock)
         } else {
@@ -48,7 +48,4 @@ class StocksListRepositoryImpl(
         localDataSource.getFavoritesStocks().map { it.toStock() }
     }
 
-    override suspend fun searchStock(query: String): List<Stock> = withContext(Dispatchers.IO){
-        finnhubDataSource.searchStock(query).foundStocks.map { it.toStock() }
-    }
 }

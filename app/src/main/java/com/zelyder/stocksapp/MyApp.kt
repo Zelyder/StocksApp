@@ -8,6 +8,8 @@ import com.zelyder.stocksapp.data.storage.db.StocksDb
 import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSourceImpl
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSourceImpl
 import com.zelyder.stocksapp.domain.datasources.StocksMboumDataSourceImpl
+import com.zelyder.stocksapp.domain.repositories.SearchRepository
+import com.zelyder.stocksapp.domain.repositories.SearchRepositoryImpl
 import com.zelyder.stocksapp.domain.repositories.StocksListRepository
 import com.zelyder.stocksapp.domain.repositories.StocksListRepositoryImpl
 import com.zelyder.stocksapp.presentation.core.ViewModelFactory
@@ -18,6 +20,7 @@ class MyApp : Application(), ViewModelFactoryProvider {
 
     private lateinit var viewModelFactory: ViewModelFactory
     private lateinit var stocksListRepository: StocksListRepository
+    private lateinit var searchRepository: SearchRepository
 
     @ExperimentalSerializationApi
     override fun onCreate() {
@@ -25,7 +28,7 @@ class MyApp : Application(), ViewModelFactoryProvider {
 
         initRepositories()
 
-        viewModelFactory = ViewModelFactory(stocksListRepository)
+        viewModelFactory = ViewModelFactory(stocksListRepository, searchRepository)
 
     }
 
@@ -37,7 +40,8 @@ class MyApp : Application(), ViewModelFactoryProvider {
         val localDataSource = StocksLocalDataSourceImpl(StocksDb.create(applicationContext))
 
         stocksListRepository =
-            StocksListRepositoryImpl(mboumDataSource, finnhubDataSource, localDataSource)
+            StocksListRepositoryImpl(mboumDataSource, localDataSource)
+        searchRepository = SearchRepositoryImpl(finnhubDataSource, localDataSource)
     }
 
     override fun viewModelFactory(): ViewModelFactory = viewModelFactory
