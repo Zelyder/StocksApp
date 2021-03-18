@@ -22,52 +22,11 @@
 
     </androidx.appcompat.widget.SearchView>
 
-
-    <TextView
-        android:id="@+id/tvPopularRequests"
+    <FrameLayout
+        android:id="@+id/search_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/tv_popular_requests_text"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cgPopularRequests"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:singleSelection="true">
-
-
-        </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
-
-    <TextView
-        android:id="@+id/tvRecentlySearched"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="@string/tv_recently_searched_text"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cgRecentlySearched"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:singleSelection="true">
-
-
-        </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
+        android:layout_marginTop="16dp" />
 
 
 </LinearLayout>
