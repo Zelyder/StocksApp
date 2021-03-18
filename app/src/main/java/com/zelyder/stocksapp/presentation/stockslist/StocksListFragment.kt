@@ -5,11 +5,12 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zelyder.stocksapp.R
@@ -23,8 +24,10 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
     private var searchView: SearchView? = null
 
 
-    private val viewModel: StocksListViewModel by viewModels { viewModelFactoryProvider()
-        .viewModelFactory()}
+    private val viewModel: StocksListViewModel by viewModels {
+        viewModelFactoryProvider()
+            .viewModelFactory()
+    }
 
 
     override fun onCreateView(
@@ -40,7 +43,7 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         recyclerView = view.findViewById(R.id.rvStocks)
         tvStocks = view.findViewById(R.id.tvStocks)
         tvFavorites = view.findViewById(R.id.tvFavourite)
-        searchView = view.findViewById(R.id.searchView)
+        searchView = view.findViewById(R.id.start_searchView)
 
         recyclerView?.layoutManager = LinearLayoutManager(
             view.context,
@@ -70,6 +73,13 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         tvFavorites?.setOnClickListener {
             viewModel.swapToFavTab()
         }
+
+        searchView?.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                findNavController().navigate(StocksListFragmentDirections.actionStocksListFragmentToSearchFragment())
+            }
+        }
+
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 viewModel.searchStock(s)
@@ -88,6 +98,7 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         recyclerView = null
         tvStocks = null
         tvFavorites = null
+        searchView = null
         super.onDestroyView()
     }
 
@@ -103,12 +114,12 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         val typedValue = TypedValue()
         requireContext().theme.resolveAttribute(R.attr.colorOnSecondary, typedValue, true)
 
-        if (isFavoriteTab){
+        if (isFavoriteTab) {
             tvStocksSize = resources.getDimension(R.dimen.unselected_tab_size)
             tvFavoritesSize = resources.getDimension(R.dimen.selected_tab_size)
             tvStocks?.setTextColor(ContextCompat.getColor(requireContext(), R.color.grey))
             tvFavorites?.setTextColor(typedValue.data)
-        }else {
+        } else {
             tvStocksSize = resources.getDimension(R.dimen.selected_tab_size)
             tvFavoritesSize = resources.getDimension(R.dimen.unselected_tab_size)
             tvStocks?.setTextColor(typedValue.data)
