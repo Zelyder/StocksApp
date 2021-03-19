@@ -27,9 +27,32 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
+
+    <TextView
+        android:id="@+id/tvErrorTextSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/tv_stocks_text"
+        android:textSize="16sp"
+        android:visibility="gone"
+         />
+
+    <ImageView
+        android:id="@+id/ivNoConnection"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_cloud_off"
+        tools:ignore="ContentDescription" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvStocksSearch"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/item_stock" />
+
 </LinearLayout>

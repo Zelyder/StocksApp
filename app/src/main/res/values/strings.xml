@@ -9,5 +9,9 @@
     <string name="search_hint">Find company or ticker</string>
     <string name="tv_popular_requests_text">Popular requests</string>
     <string name="tv_recently_searched_text">You’ve searched for this</string>
+    <string name="tv_searched_error_text">Something went wrong. Please, check your connection and try again</string>
+    <string name="tv_searched_placeholder_text">Start typing in a search bar to find a stock</string>
+    <string name="tv_searched_empty_result_text">No results matching your query</string>
+    <string name="tv_searched_error_unknown_text">Unexpected error while trying to fetch stock!</string>
 
 </resources>
