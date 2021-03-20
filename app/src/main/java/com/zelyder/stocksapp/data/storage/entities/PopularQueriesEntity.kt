@@ -8,8 +8,8 @@ import com.zelyder.stocksapp.data.storage.DbContract
 @Entity(tableName = DbContract.PopularQueries.TABLE_NAME)
 data class PopularQueriesEntity (
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = DbContract.RecentQueries.COLUMN_NAME_ID)
+    @ColumnInfo(name = DbContract.PopularQueries.COLUMN_NAME_ID)
     val id: Int = 0,
-    @ColumnInfo(name = DbContract.RecentQueries.COLUMN_NAME_QUERY)
+    @ColumnInfo(name = DbContract.PopularQueries.COLUMN_NAME_QUERY)
     val query: String = ""
 )
