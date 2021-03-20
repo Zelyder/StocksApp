@@ -34,7 +34,9 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
     private var pbSearch: ProgressBar? = null
     private var tvErrorText: TextView? = null
     private var ivNoConnection: ImageView? = null
-    private  lateinit var stocksAdapter: StocksListAdapter
+    private lateinit var stocksAdapter: StocksListAdapter
+
+    private var query: String? = null
 
 
     override fun onCreateView(
@@ -61,9 +63,10 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
         stocksAdapter = StocksListAdapter(this)
         recyclerView?.adapter = stocksAdapter
 
-        viewModel.stocksList.observe(this.viewLifecycleOwner,  ::handleSearchListResult)
+        viewModel.stocksList.observe(this.viewLifecycleOwner, ::handleSearchListResult)
         viewModel.searchState.observe(viewLifecycleOwner, ::handleLoadingState)
-        arguments?.getString(KEY_QUERY)?.let { viewModel.searchStock(it) }
+        query = arguments?.getString(KEY_QUERY)
+        query?.let { viewModel.searchStock(it) }
     }
 
     override fun onDestroyView() {
@@ -87,7 +90,8 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
     private fun handleSearchListResult(result: SearchResult) {
         when (result) {
             is ValidResult -> {
-                    stocksAdapter.bindStocks(result.result)
+                query?.let { viewModel.saveQuery(it) }
+                stocksAdapter.bindStocks(result.result)
             }
             is ErrorResult -> {
                 stocksAdapter.bindStocks(emptyList())

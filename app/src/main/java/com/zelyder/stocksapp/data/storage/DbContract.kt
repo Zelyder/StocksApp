@@ -20,4 +20,18 @@ object DbContract {
         const val  TABLE_NAME = "favorite"
     }
 
+    object RecentQueries {
+        const val TABLE_NAME = "recentQueries"
+
+        const val COLUMN_NAME_ID = "id"
+        const val COLUMN_NAME_QUERY = "recentQuery"
+    }
+
+    object PopularQueries {
+        const val TABLE_NAME = "popularQueries"
+
+        const val COLUMN_NAME_ID = "id"
+        const val COLUMN_NAME_QUERY = "popularQuery"
+    }
+
 }

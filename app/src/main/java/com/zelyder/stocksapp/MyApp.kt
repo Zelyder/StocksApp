@@ -41,7 +41,7 @@ class MyApp : Application(), ViewModelFactoryProvider {
 
         stocksListRepository =
             StocksListRepositoryImpl(mboumDataSource, localDataSource)
-        searchRepository = SearchRepositoryImpl(finnhubDataSource, localDataSource)
+        searchRepository = SearchRepositoryImpl(mboumDataSource, finnhubDataSource, localDataSource)
     }
 
     override fun viewModelFactory(): ViewModelFactory = viewModelFactory

@@ -24,6 +24,11 @@ class SearchViewModel(private val searchRepository: SearchRepository): ViewModel
     private val _searchState = MutableLiveData<SearchState>()
     val searchState: LiveData<SearchState> get() = _searchState
 
+    private val _recentQueries = MutableLiveData<List<String>>()
+    val recentQueries: LiveData<List<String>> get() = _recentQueries
+
+    private val _popularQueries = MutableLiveData<List<String>>()
+    val popularQueries: LiveData<List<String>> get() = _popularQueries
 
     private val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
 
@@ -59,7 +64,6 @@ class SearchViewModel(private val searchRepository: SearchRepository): ViewModel
 
 
     fun searchStock(query: String) {
-
         viewModelScope.launch(coroutineExceptionHandler) {
             queryChannel.send(query)
         }
@@ -69,6 +73,24 @@ class SearchViewModel(private val searchRepository: SearchRepository): ViewModel
     fun updateFavState(stock: Stock) {
         viewModelScope.launch(coroutineExceptionHandler) {
             searchRepository.updateStocksIsFavoriteAsync(stock)
+        }
+    }
+
+    fun saveQuery(query: String) {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            searchRepository.saveRecentQuery(query)
+        }
+    }
+
+    fun updateRecentQueries() {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            _recentQueries.value = searchRepository.getRecentQueries()
+        }
+    }
+
+    fun updatePopularQueries() {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            _popularQueries.value = searchRepository.getPopularQueries()
         }
     }
 }

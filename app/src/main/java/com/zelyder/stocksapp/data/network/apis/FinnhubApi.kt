@@ -26,4 +26,5 @@ interface FinnhubApi {
         @Query("symbol") ticker: String
     ): StockPriceDto
 
+
 }
