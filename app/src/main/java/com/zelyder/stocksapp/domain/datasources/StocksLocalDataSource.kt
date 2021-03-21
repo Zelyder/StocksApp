@@ -23,7 +23,7 @@ interface StocksLocalDataSource {
     suspend fun getRecentQueries(): List<RecentQueriesEntity>
     suspend fun saveRecentQueries(recentQueries: List<RecentQueriesEntity>)
     suspend fun saveRecentQuery(recentQuery: RecentQueriesEntity)
-    suspend fun cutOffRecentQueriesAfter(index: Int)
+    suspend fun deleteRecentQuery(recentQuery: RecentQueriesEntity)
 
     suspend fun getPopularQueries(): List<PopularQueriesEntity>
     suspend fun savePopularQueries(popularQueries: List<PopularQueriesEntity>)

@@ -39,11 +39,15 @@ class SearchRepositoryImpl(
         }
 
     override suspend fun saveRecentQuery(query: String)  = withContext(Dispatchers.IO){
+        val queries = localDataSource.getRecentQueries()
+        if(queries.size > QUERY_LIMIT) {
+            localDataSource.deleteRecentQuery(queries.last())
+        }
         localDataSource.saveRecentQuery(RecentQueriesEntity(query = query))
     }
 
     override suspend fun getRecentQueries(): List<String>  = withContext(Dispatchers.IO){
-        localDataSource.getRecentQueries().map { it.query }
+        localDataSource.getRecentQueries().map { it.query }.reversed()
     }
 
     override suspend fun getPopularQueries(forceRefresh: Boolean): List<String> = withContext(Dispatchers.IO){
@@ -51,10 +55,12 @@ class SearchRepositoryImpl(
         var queries = localDataSource.getPopularQueries().map { it.query }
 
         if (forceRefresh || queries.isEmpty()) {
-            queries = mboumDataSource.getTrendingStocks().tickers
-            localDataSource.savePopularQueries(queries.take(20).map { PopularQueriesEntity(query = it) })
+            queries = mboumDataSource.getTrendingStocks().tickers.take(QUERY_LIMIT)
+            localDataSource.savePopularQueries(queries.map { PopularQueriesEntity(query = it) })
         }
 
         queries
     }
 }
+
+const val QUERY_LIMIT = 30

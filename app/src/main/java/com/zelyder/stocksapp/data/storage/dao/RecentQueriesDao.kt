@@ -1,9 +1,6 @@
 package com.zelyder.stocksapp.data.storage.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.zelyder.stocksapp.data.storage.DbContract
 import com.zelyder.stocksapp.data.storage.entities.RecentQueriesEntity
 
@@ -25,7 +22,7 @@ interface RecentQueriesDao {
     @Query("DELETE FROM ${DbContract.RecentQueries.TABLE_NAME}")
     fun deleteAll()
 
-    @Query("DELETE FROM ${DbContract.RecentQueries.TABLE_NAME} WHERE ${DbContract.RecentQueries.COLUMN_NAME_ID} > :index")
-    fun cutOffAfter(index: Int)
+    @Delete
+    fun deleteQuery(recentQueriesEntity: RecentQueriesEntity)
 
 }

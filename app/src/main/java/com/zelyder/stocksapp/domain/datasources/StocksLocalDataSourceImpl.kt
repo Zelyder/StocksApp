@@ -69,8 +69,8 @@ class StocksLocalDataSourceImpl(private val stocksDb: StocksDb): StocksLocalData
         stocksDb.recentQueriesDao().addQuery(recentQuery)
     }
 
-    override suspend fun cutOffRecentQueriesAfter(index: Int) = withContext(Dispatchers.IO){
-        stocksDb.recentQueriesDao().cutOffAfter(index)
+    override suspend fun deleteRecentQuery(recentQuery: RecentQueriesEntity) = withContext(Dispatchers.IO){
+        stocksDb.recentQueriesDao().deleteQuery(recentQuery)
     }
 
     override suspend fun getPopularQueries(): List<PopularQueriesEntity> = withContext(Dispatchers.IO){

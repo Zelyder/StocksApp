@@ -14,7 +14,7 @@ import com.zelyder.stocksapp.data.storage.entities.PopularQueriesEntity
 import com.zelyder.stocksapp.data.storage.entities.RecentQueriesEntity
 import com.zelyder.stocksapp.data.storage.entities.StockEntity
 
-@Database(entities = [StockEntity::class, FavoriteEntity::class, RecentQueriesEntity::class, PopularQueriesEntity::class], version = 5)
+@Database(entities = [StockEntity::class, FavoriteEntity::class, RecentQueriesEntity::class, PopularQueriesEntity::class], version = 6)
 abstract class StocksDb: RoomDatabase() {
 
     abstract fun stocksDao(): StocksDao

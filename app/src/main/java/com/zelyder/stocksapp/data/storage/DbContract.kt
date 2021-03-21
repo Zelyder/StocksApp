@@ -23,7 +23,6 @@ object DbContract {
     object RecentQueries {
         const val TABLE_NAME = "recentQueries"
 
-        const val COLUMN_NAME_ID = "id"
         const val COLUMN_NAME_QUERY = "recentQuery"
     }
 
