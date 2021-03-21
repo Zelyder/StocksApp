@@ -77,7 +77,7 @@ class StocksListAdapter(private val itemClickListener: StockListItemClickListene
 
             if (stock.logo.isNotEmpty()) {
                 Picasso.get().load(stock.logo)
-                    .placeholder(R.drawable.ic_yndx)
+                    .placeholder(R.drawable.ic_image)
                     .into(ivLogo)
             }
 
@@ -86,7 +86,7 @@ class StocksListAdapter(private val itemClickListener: StockListItemClickListene
             ivFav.setOnClickListener {
                 stock.isFavorite = !stock.isFavorite
                 switchFav(stock.isFavorite)
-                itemClickListener.onClickFavourite(stock.ticker, stock.isFavorite)
+                itemClickListener.onClickFavourite(stock)
             }
         }
 

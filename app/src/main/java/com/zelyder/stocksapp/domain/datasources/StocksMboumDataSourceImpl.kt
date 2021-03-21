@@ -1,10 +1,10 @@
 package com.zelyder.stocksapp.domain.datasources
 
 import com.zelyder.stocksapp.data.network.apis.MboumApi
-import com.zelyder.stocksapp.data.network.dto.MostActivesStocksDto
-import com.zelyder.stocksapp.data.network.dto.TrendingStocksDto
+import com.zelyder.stocksapp.data.network.dto.mboum.MostActivesStocksDto
+import com.zelyder.stocksapp.data.network.dto.mboum.TrendingStocksDto
 
-class StocksRemoteDataSourceImpl(private val mboumApi: MboumApi) : StocksRemoteDataSource {
+class StocksMboumDataSourceImpl(private val mboumApi: MboumApi) : StocksMboumDataSource {
     override suspend fun getTrendingStocks(): TrendingStocksDto =
         mboumApi.getTrendingStocks()[0]
 

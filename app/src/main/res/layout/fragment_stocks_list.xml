@@ -21,14 +21,16 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
             <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
+                android:id="@+id/start_searchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 app:defaultQueryHint="@string/search_hint"
-                app:searchHintIcon="@drawable/ic_search"
                 app:searchIcon="@drawable/ic_search"
                 app:iconifiedByDefault="false"
                 android:theme="@style/AppSearchView"
+                android:background="@drawable/search_bg_query"
                 android:layout_marginTop="16dp"/>
 
 
