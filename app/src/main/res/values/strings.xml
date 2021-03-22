@@ -22,5 +22,6 @@
     <string name="chart_scale_6m">6M</string>
     <string name="chart_scale_1y">1Y</string>
     <string name="chart_scale_all">All</string>
+    <string name="btn_buy_text">Buy for %s</string>
 
 </resources>

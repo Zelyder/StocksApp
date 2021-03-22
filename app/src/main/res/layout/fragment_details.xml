@@ -65,7 +65,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/ivFavDetails"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -73,7 +73,9 @@
                 android:layout_marginBottom="12dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/ic_inline_fav_none"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
         </LinearLayout>
 
         <com.google.android.material.tabs.TabLayout

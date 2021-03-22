@@ -81,17 +81,6 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
             }
         }
 
-//        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(s: String): Boolean {
-//                viewModel.searchStock(s)
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(s: String): Boolean {
-//                return false
-//            }
-//        })
-
 
     }
 
