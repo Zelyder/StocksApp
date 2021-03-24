@@ -8,10 +8,7 @@ import com.zelyder.stocksapp.data.storage.db.StocksDb
 import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSourceImpl
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSourceImpl
 import com.zelyder.stocksapp.domain.datasources.StocksMboumDataSourceImpl
-import com.zelyder.stocksapp.domain.repositories.SearchRepository
-import com.zelyder.stocksapp.domain.repositories.SearchRepositoryImpl
-import com.zelyder.stocksapp.domain.repositories.StocksListRepository
-import com.zelyder.stocksapp.domain.repositories.StocksListRepositoryImpl
+import com.zelyder.stocksapp.domain.repositories.*
 import com.zelyder.stocksapp.presentation.core.ViewModelFactory
 import com.zelyder.stocksapp.presentation.core.ViewModelFactoryProvider
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -21,6 +18,7 @@ class MyApp : Application(), ViewModelFactoryProvider {
     private lateinit var viewModelFactory: ViewModelFactory
     private lateinit var stocksListRepository: StocksListRepository
     private lateinit var searchRepository: SearchRepository
+    private lateinit var detailsRepository: DetailsRepository
 
     @ExperimentalSerializationApi
     override fun onCreate() {
@@ -28,7 +26,7 @@ class MyApp : Application(), ViewModelFactoryProvider {
 
         initRepositories()
 
-        viewModelFactory = ViewModelFactory(stocksListRepository, searchRepository)
+        viewModelFactory = ViewModelFactory(stocksListRepository, searchRepository, detailsRepository)
 
     }
 
@@ -42,6 +40,7 @@ class MyApp : Application(), ViewModelFactoryProvider {
         stocksListRepository =
             StocksListRepositoryImpl(mboumDataSource, localDataSource)
         searchRepository = SearchRepositoryImpl(mboumDataSource, finnhubDataSource, localDataSource)
+        detailsRepository = DetailsRepositoryImpl(finnhubDataSource, localDataSource)
     }
 
     override fun viewModelFactory(): ViewModelFactory = viewModelFactory

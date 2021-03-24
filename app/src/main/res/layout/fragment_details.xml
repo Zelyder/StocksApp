@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/ioexample.appbar"
+        android:id="@+id/appbarDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorOnPrimary"
@@ -26,7 +26,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="20dp"
-            android:layout_weight="1"
             android:orientation="horizontal">
 
             <ImageView
@@ -82,6 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabTextAppearance="@style/AppTabTextAppearance"
+            android:background="?attr/colorOnPrimary"
             android:isScrollContainer="true">
 
             <com.google.android.material.tabs.TabItem
@@ -147,9 +147,9 @@
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/cgScaleChart"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="40dp"
                     android:layout_marginEnd="16dp"

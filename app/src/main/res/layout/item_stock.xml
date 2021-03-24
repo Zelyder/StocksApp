@@ -26,7 +26,7 @@
             android:layout_width="52dp"
             android:layout_height="52dp"
             app:shapeAppearanceOverlay="@style/roundedSquare"
-            app:srcCompat="@drawable/ic_yndx" />
+            app:srcCompat="@drawable/ic_image" />
 
         <LinearLayout
             android:layout_width="match_parent"

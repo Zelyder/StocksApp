@@ -1,6 +1,7 @@
 package com.zelyder.stocksapp.data.network.apis
 
 import com.zelyder.stocksapp.data.network.dto.finnhub.SearchResultDto
+import com.zelyder.stocksapp.data.network.dto.finnhub.StockCandlesDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockInfoDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockPriceDto
 import retrofit2.http.GET
@@ -25,6 +26,15 @@ interface FinnhubApi {
         @Query("token") apiKey: String,
         @Query("symbol") ticker: String
     ): StockPriceDto
+
+    @GET("stock/candle")
+    suspend fun getStockCandles(
+        @Query("token") apiKey: String,
+        @Query("symbol") ticker: String,
+        @Query("resolution") resolution: String,
+        @Query("from") fromTimestamp: Long,
+        @Query("to") toTimestamp: Long,
+    ):StockCandlesDto
 
 
 }
