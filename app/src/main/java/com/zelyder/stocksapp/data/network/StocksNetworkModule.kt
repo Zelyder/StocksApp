@@ -32,19 +32,7 @@ class StocksNetworkModule: StocksNetworkClient {
         .addConverterFactory(jsonFormat.asConverterFactory("application/json".toMediaType()))
         .build()
 
-    private val client = OkHttpClient()
-    private val request = Request.Builder().url("wss://ws.finnhub.io?token=$FINNHUB_API_KEY").build()
-    private val listener = PriceWebSocketListener()
-
-
-
     override fun finnhubApi(): FinnhubApi = finnhubRetrofit.create()
 
     override fun mboumApi(): MboumApi = mboumRetrofit.create()
-
-    override fun openWebSocket(): WebSocket = client.newWebSocket(request, listener)
-
-    override fun closeWebSocket() {
-        client.dispatcher.executorService.shutdown()
-    }
 }

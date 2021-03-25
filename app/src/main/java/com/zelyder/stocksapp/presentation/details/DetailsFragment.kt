@@ -80,6 +80,12 @@ class DetailsFragment : Fragment() {
 
         }
         viewModel.uploadChart(args.stock.ticker)
+//        viewModel.subscribeToSocketEvents(args.stock.ticker)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+//        viewModel.closeSocket()
     }
 
     private fun initViews(view: View) {
@@ -93,7 +99,6 @@ class DetailsFragment : Fragment() {
         chart = view.findViewById(R.id.chart)
 
         chart.apply {
-            //setPinchZoom(true)
             setScaleEnabled(false)
             isDoubleTapToZoomEnabled = false
             xAxis.isEnabled = false

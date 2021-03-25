@@ -7,6 +7,4 @@ import okhttp3.WebSocket
 interface StocksNetworkClient {
     fun finnhubApi(): FinnhubApi
     fun mboumApi(): MboumApi
-    fun openWebSocket(): WebSocket
-    fun closeWebSocket()
 }
