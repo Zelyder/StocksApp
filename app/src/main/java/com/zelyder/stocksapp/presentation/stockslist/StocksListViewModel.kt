@@ -49,4 +49,8 @@ class StocksListViewModel(private val stocksListRepository: StocksListRepository
             }
         }
     }
+
+    fun resetTabState() {
+        _isFavSelected.value = false
+    }
 }

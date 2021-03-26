@@ -104,6 +104,7 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         searchView = null
         tvErrorText = null
         ivNoConnection = null
+        viewModel.resetTabState()
         super.onDestroyView()
     }
 
