@@ -5,6 +5,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -23,6 +24,8 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
     private var tvStocks: TextView? = null
     private var tvFavorites: TextView? = null
     private var searchView: SearchView? = null
+    private var tvErrorText: TextView? = null
+    private var ivNoConnection: ImageView? = null
 
 
     private val viewModel: StocksListViewModel by viewModels {
@@ -45,6 +48,8 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         tvStocks = view.findViewById(R.id.tvStocks)
         tvFavorites = view.findViewById(R.id.tvFavourite)
         searchView = view.findViewById(R.id.start_searchView)
+        tvErrorText = view.findViewById(R.id.tvErrorTextMainList)
+        ivNoConnection = view.findViewById(R.id.ivNoConnectionMainList)
 
         recyclerView?.layoutManager = LinearLayoutManager(
             view.context,
@@ -56,11 +61,19 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         viewModel.stocksList.observe(this.viewLifecycleOwner) {
             (recyclerView?.adapter as? StocksListAdapter)?.apply {
                 bindStocks(it)
+                if (!it.isNullOrEmpty()) {
+                    hideNoConnectionText()
+                }
             }
         }
 
         if (savedInstanceState == null) {
             viewModel.updateList()
+            if (viewModel.stocksList.value.isNullOrEmpty()){
+                showNoConnectionText()
+            } else {
+                hideNoConnectionText()
+            }
         }
 
         viewModel.isFavSelected.observe(this.viewLifecycleOwner) { isFavSelected ->
@@ -89,6 +102,8 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         tvStocks = null
         tvFavorites = null
         searchView = null
+        tvErrorText = null
+        ivNoConnection = null
         super.onDestroyView()
     }
 
@@ -118,5 +133,15 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
 
         tvStocks?.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvStocksSize)
         tvFavorites?.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvFavoritesSize)
+    }
+
+    private fun showNoConnectionText() {
+        tvErrorText?.visibility = View.VISIBLE
+        ivNoConnection?.visibility = View.VISIBLE
+    }
+
+    private fun hideNoConnectionText() {
+        tvErrorText?.visibility = View.GONE
+        ivNoConnection?.visibility = View.GONE
     }
 }

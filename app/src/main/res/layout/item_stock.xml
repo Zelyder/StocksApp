@@ -52,6 +52,9 @@
                         android:layout_height="wrap_content"
                         android:textSize="18sp"
                         android:textStyle="bold"
+                        android:maxEms="4"
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         tools:text="YNDX" />
 
                     <ImageView
