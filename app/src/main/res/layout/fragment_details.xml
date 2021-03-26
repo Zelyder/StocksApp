@@ -144,6 +144,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="260dp"
                     />
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/cgScaleChart"
@@ -159,7 +162,7 @@
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cDay"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        style="@style/CustomChipStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/chart_scale_d"
@@ -168,7 +171,7 @@
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cWeek"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        style="@style/CustomChipStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/chart_scale_w"
@@ -177,7 +180,7 @@
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cMonth"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        style="@style/CustomChipStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/chart_scale_m"
@@ -186,7 +189,7 @@
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cSixMonths"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        style="@style/CustomChipStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/chart_scale_6m"
@@ -195,7 +198,7 @@
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cYear"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        style="@style/CustomChipStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/chart_scale_1y"
@@ -204,6 +207,8 @@
 
 
                 </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnBuy"

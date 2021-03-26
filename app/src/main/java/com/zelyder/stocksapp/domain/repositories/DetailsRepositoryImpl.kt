@@ -46,7 +46,7 @@ class DetailsRepositoryImpl @ExperimentalCoroutinesApi constructor(
                     fromTimestamp = toTimestamp - DAY_IN_MILLIS * 182
                 }
                 SelectedItem.YEAR -> {
-                    resolution = "W"
+                    resolution = "D"
                     fromTimestamp = toTimestamp - DAY_IN_MILLIS * 365
                 }
             }
