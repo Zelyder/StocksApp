@@ -31,15 +31,15 @@ class DetailsRepositoryImpl @ExperimentalCoroutinesApi constructor(
             when (selectedItem) {
                 SelectedItem.DAY -> {
                     resolution = "5"
-                    fromTimestamp = toTimestamp - DAY_IN_MILLIS * 3
+                    fromTimestamp = toTimestamp - DAY_IN_MILLIS
                 }
                 SelectedItem.WEEK -> {
                     resolution = "60"
-                    fromTimestamp = toTimestamp - DAY_IN_MILLIS * 14
+                    fromTimestamp = toTimestamp - DAY_IN_MILLIS * 7
                 }
                 SelectedItem.MONTH -> {
                     resolution = "D"
-                    fromTimestamp = toTimestamp - DAY_IN_MILLIS * 60
+                    fromTimestamp = toTimestamp - DAY_IN_MILLIS * 30
                 }
                 SelectedItem.SIX_MONTHS -> {
                     resolution = "D"

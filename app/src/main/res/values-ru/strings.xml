@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Stocks app</string>
+    <string name="tv_stocks_text">Акции</string>
+    <string name="tv_favourite_text">Избранное</string>
+    <string name="search_hint">Найдите компанию или тикер</string>
+    <string name="tv_popular_requests_text">Популярные запросы</string>
+    <string name="tv_recently_searched_text">Вы искали это</string>
+    <string name="tv_no_connection_error_text">Что-то пошло не так. Пожалуйста, проверьте ваше соединение и попробуйте еще раз</string>
+    <string name="tv_searched_placeholder_text">Начните вводить текст в строке поиска, чтобы найти акцию</string>
+    <string name="tv_searched_empty_result_text">По вашему запросу ничего не найдено</string>
+    <string name="tv_searched_error_unknown_text">Неожиданная ошибка при попытке получить данные!</string>
+    <string name="tab_chart">График</string>
+    <string name="tab_summary">Сводка</string>
+    <string name="tab_news">Новости</string>
+    <string name="chart_scale_d">Д</string>
+    <string name="chart_scale_w">Н</string>
+    <string name="chart_scale_m">М</string>
+    <string name="chart_scale_6m">6М</string>
+    <string name="chart_scale_1y">1Г</string>
+    <string name="btn_buy_text">Купить за %s</string>
+    <string name="chart_scale_all">Все</string>
+</resources>

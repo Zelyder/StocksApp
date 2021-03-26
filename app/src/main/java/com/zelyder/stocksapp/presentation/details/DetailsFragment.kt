@@ -16,6 +16,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -26,6 +27,7 @@ import com.zelyder.stocksapp.domain.models.SelectedItem
 import com.zelyder.stocksapp.presentation.core.toDeltaString
 import com.zelyder.stocksapp.presentation.core.toPriceString
 import com.zelyder.stocksapp.viewModelFactoryProvider
+import kotlinx.android.synthetic.main.fragment_details.*
 
 
 class DetailsFragment : Fragment() {
@@ -86,7 +88,8 @@ class DetailsFragment : Fragment() {
             chart.invalidate()
 
         }
-        viewModel.uploadChart(args.stock.ticker, SelectedItem.DAY)
+        viewModel.uploadChart(args.stock.ticker, SelectedItem.MONTH)
+        cMonth.isChecked = true
         //TODO: finish web sockets
 //        viewModel.subscribeToSocketEvents(args.stock.ticker)
     }
