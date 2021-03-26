@@ -21,9 +21,9 @@ class StocksListViewModel(private val stocksListRepository: StocksListRepository
     val stocksList: LiveData<List<Stock>> get() = _stocksList
     val isFavSelected: LiveData<Boolean?> get() = _isFavSelected
 
-    fun updateList() {
+    fun updateList(forceRefresh: Boolean = false) {
         viewModelScope.launch(coroutineExceptionHandler) {
-            _stocksList.value = stocksListRepository.getStocksAsync()
+            _stocksList.value = stocksListRepository.getStocksAsync(forceRefresh)
         }
     }
 

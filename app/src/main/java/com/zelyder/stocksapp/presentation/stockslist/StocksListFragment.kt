@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.zelyder.stocksapp.R
 import com.zelyder.stocksapp.domain.models.Stock
 import com.zelyder.stocksapp.viewModelFactoryProvider
@@ -26,6 +27,9 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
     private var searchView: SearchView? = null
     private var tvErrorText: TextView? = null
     private var ivNoConnection: ImageView? = null
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
+
+    private var isFavoriteTab: Boolean = false
 
 
     private val viewModel: StocksListViewModel by viewModels {
@@ -50,6 +54,7 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         searchView = view.findViewById(R.id.start_searchView)
         tvErrorText = view.findViewById(R.id.tvErrorTextMainList)
         ivNoConnection = view.findViewById(R.id.ivNoConnectionMainList)
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayoutMain)
 
         recyclerView?.layoutManager = LinearLayoutManager(
             view.context,
@@ -61,15 +66,30 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         viewModel.stocksList.observe(this.viewLifecycleOwner) {
             (recyclerView?.adapter as? StocksListAdapter)?.apply {
                 bindStocks(it)
+                swipeRefreshLayout?.isRefreshing = false
                 if (!it.isNullOrEmpty()) {
                     hideNoConnectionText()
                 }
             }
         }
 
+        swipeRefreshLayout?.setOnRefreshListener {
+            if (isFavoriteTab) {
+                swipeRefreshLayout?.isRefreshing = false
+            } else {
+                viewModel.updateList(true)
+            }
+        }
+        swipeRefreshLayout?.setColorSchemeResources(
+            android.R.color.holo_blue_bright,
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,
+            android.R.color.holo_red_light
+        )
+
         if (savedInstanceState == null) {
             viewModel.updateList()
-            if (viewModel.stocksList.value.isNullOrEmpty()){
+            if (viewModel.stocksList.value.isNullOrEmpty()) {
                 showNoConnectionText()
             } else {
                 hideNoConnectionText()
@@ -77,7 +97,10 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         }
 
         viewModel.isFavSelected.observe(this.viewLifecycleOwner) { isFavSelected ->
-            isFavSelected?.let { swapTab(it) }
+            isFavSelected?.let {
+                swapTab(it)
+                isFavoriteTab = it
+            }
         }
 
         tvStocks?.setOnClickListener {
