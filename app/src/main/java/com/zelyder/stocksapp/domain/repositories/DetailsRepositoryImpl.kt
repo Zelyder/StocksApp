@@ -5,6 +5,7 @@ import com.zelyder.stocksapp.data.network.SocketUpdate
 import com.zelyder.stocksapp.data.network.WebServicesProvider
 import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSource
+import com.zelyder.stocksapp.domain.models.SelectedItem
 import com.zelyder.stocksapp.domain.models.StockCandle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,27 +21,57 @@ class DetailsRepositoryImpl @ExperimentalCoroutinesApi constructor(
 ) : DetailsRepository {
 
 
+    override suspend fun getStockCandles(ticker: String, selectedItem: SelectedItem): StockCandle =
+        withContext(Dispatchers.IO) {
 
-    override suspend fun getStockCandles(ticker: String): StockCandle = withContext(Dispatchers.IO){
-        finnhubDataSource.getStockCandles(
-            ticker,
-            "D",
-            (System.currentTimeMillis() - _30_DAYS_IN_MILLIS)/1000,
-            System.currentTimeMillis()/1000
-        ).toStockCandle()
-    }
+            val resolution: String
+            val fromTimestamp: Long
+            val toTimestamp: Long = System.currentTimeMillis()
+
+            when (selectedItem) {
+                SelectedItem.DAY -> {
+                    resolution = "5"
+                    fromTimestamp = toTimestamp - DAY_IN_MILLIS * 3
+                }
+                SelectedItem.WEEK -> {
+                    resolution = "60"
+                    fromTimestamp = toTimestamp - DAY_IN_MILLIS * 14
+                }
+                SelectedItem.MONTH -> {
+                    resolution = "D"
+                    fromTimestamp = toTimestamp - DAY_IN_MILLIS * 60
+                }
+                SelectedItem.SIX_MONTHS -> {
+                    resolution = "D"
+                    fromTimestamp = toTimestamp - DAY_IN_MILLIS * 182
+                }
+                SelectedItem.YEAR -> {
+                    resolution = "W"
+                    fromTimestamp = toTimestamp - DAY_IN_MILLIS * 365
+                }
+            }
+
+
+            finnhubDataSource.getStockCandles(
+                ticker,
+                resolution,
+                fromTimestamp / 1000,
+                toTimestamp / 1000
+            ).toStockCandle()
+        }
 
     @ExperimentalCoroutinesApi
-    override suspend fun closeSocket() = withContext(Dispatchers.IO){
+    override suspend fun closeSocket() = withContext(Dispatchers.IO) {
         webServicesProvider.stopSocket()
     }
 
     @ExperimentalCoroutinesApi
-    override suspend fun startSocket(ticker: String): Channel<SocketUpdate> = withContext(Dispatchers.IO){
-        webServicesProvider.startSocket(ticker)
-    }
+    override suspend fun startSocket(ticker: String): Channel<SocketUpdate> =
+        withContext(Dispatchers.IO) {
+            webServicesProvider.startSocket(ticker)
+        }
 
 
 }
 
-const val _30_DAYS_IN_MILLIS: Long = 2592000000
+const val DAY_IN_MILLIS: Long = 86400000

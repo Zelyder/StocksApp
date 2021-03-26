@@ -153,10 +153,12 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="40dp"
                     android:layout_marginEnd="16dp"
+                    app:selectionRequired="true"
                     app:singleLine="true"
                     app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/cDay"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -165,6 +167,8 @@
                         app:chipStartPadding="12dp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/cWeek"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/chart_scale_w"
@@ -172,6 +176,8 @@
                         app:chipStartPadding="12dp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/cMonth"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/chart_scale_m"
@@ -179,6 +185,8 @@
                         app:chipStartPadding="12dp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/cSixMonths"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/chart_scale_6m"
@@ -186,16 +194,11 @@
                         app:chipStartPadding="12dp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/cYear"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/chart_scale_1y"
-                        app:chipEndPadding="12dp"
-                        app:chipStartPadding="12dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/chart_scale_all"
                         app:chipEndPadding="12dp"
                         app:chipStartPadding="12dp" />
 

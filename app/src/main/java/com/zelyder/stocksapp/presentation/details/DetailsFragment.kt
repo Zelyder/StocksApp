@@ -1,6 +1,7 @@
 package com.zelyder.stocksapp.presentation.details
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +20,9 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.ChipGroup
 import com.zelyder.stocksapp.R
+import com.zelyder.stocksapp.domain.models.SelectedItem
 import com.zelyder.stocksapp.presentation.core.toDeltaString
 import com.zelyder.stocksapp.presentation.core.toPriceString
 import com.zelyder.stocksapp.viewModelFactoryProvider
@@ -41,6 +44,7 @@ class DetailsFragment : Fragment() {
     private lateinit var ivFav: ImageView
     private lateinit var btnBuy: MaterialButton
     private lateinit var chart: LineChart
+    private lateinit var cgScaleChart: ChipGroup
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,8 +73,11 @@ class DetailsFragment : Fragment() {
                 setDrawCircles(false)
                 setDrawValues(false)
                 setDrawFilled(true)
-                fillDrawable =  ContextCompat.getDrawable(requireContext(), R.drawable.chart_fill_gradient)
-                setDrawHighlightIndicators(false)
+                fillDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.chart_fill_gradient)
+                setDrawHorizontalHighlightIndicator(false)
+                highLightColor = typedValue.data
+                highlightLineWidth = 1.0f
             }
 
 
@@ -79,7 +86,8 @@ class DetailsFragment : Fragment() {
             chart.invalidate()
 
         }
-        viewModel.uploadChart(args.stock.ticker)
+        viewModel.uploadChart(args.stock.ticker, SelectedItem.DAY)
+        //TODO: finish web sockets
 //        viewModel.subscribeToSocketEvents(args.stock.ticker)
     }
 
@@ -97,6 +105,39 @@ class DetailsFragment : Fragment() {
         ivFav = view.findViewById(R.id.ivFavDetails)
         btnBuy = view.findViewById(R.id.btnBuy)
         chart = view.findViewById(R.id.chart)
+        cgScaleChart = view.findViewById(R.id.cgScaleChart)
+
+        var selectedItem: SelectedItem? = null
+        var showTime = true
+        cgScaleChart.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.cDay -> {
+                    selectedItem = SelectedItem.DAY
+                    showTime = true
+                }
+                R.id.cWeek -> {
+                    selectedItem = SelectedItem.WEEK
+                    showTime = true
+                }
+                R.id.cMonth -> {
+                    selectedItem = SelectedItem.MONTH
+                    showTime = false
+                }
+                R.id.cSixMonths -> {
+                    selectedItem = SelectedItem.SIX_MONTHS
+                    showTime = false
+                }
+                R.id.cYear -> {
+                    selectedItem = SelectedItem.YEAR
+                    showTime = false
+                }
+            }
+            selectedItem?.let { viewModel.uploadChart(args.stock.ticker, it) }
+            chart.marker =
+                MyMarkerView(requireContext(), R.layout.chart_marker, args.stock.currency, showTime)
+
+
+        }
 
         chart.apply {
             setScaleEnabled(false)
@@ -107,7 +148,7 @@ class DetailsFragment : Fragment() {
             legend.isEnabled = false
             description = Description().also { it.text = "" }
             isAutoScaleMinMaxEnabled = true
-            marker = MyMarkerView(requireContext(), R.layout.chart_marker, args.stock.currency)
+            marker = MyMarkerView(requireContext(), R.layout.chart_marker, args.stock.currency, showTime)
         }
 
         val tempStock = args.stock

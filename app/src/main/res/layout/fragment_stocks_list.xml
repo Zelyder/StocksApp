@@ -18,6 +18,7 @@
             android:id="@+id/collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusableInTouchMode="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
             <androidx.appcompat.widget.SearchView

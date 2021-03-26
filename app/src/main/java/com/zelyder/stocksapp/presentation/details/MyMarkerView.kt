@@ -15,7 +15,7 @@ import com.zelyder.stocksapp.presentation.core.toPriceString
 
 
 @SuppressLint("ViewConstructor")
-class MyMarkerView(context: Context, layoutResource: Int, val currency: String) : MarkerView(context, layoutResource) {
+class MyMarkerView(context: Context, layoutResource: Int, val currency: String,val showTime: Boolean = false) : MarkerView(context, layoutResource) {
     private var tvPrice: TextView? = null
     private var tvDate: TextView? = null
 
@@ -26,7 +26,7 @@ class MyMarkerView(context: Context, layoutResource: Int, val currency: String) 
 
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
         e?.let {
-            tvDate?.text = (e.x*1000).toLong().toDate()
+            tvDate?.text = (e.x*1000).toLong().toDate(showTime)
             tvPrice?.text = toPriceString(e.y, currency, resources)
         }
 

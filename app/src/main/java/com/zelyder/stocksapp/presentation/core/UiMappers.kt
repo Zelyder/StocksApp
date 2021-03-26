@@ -2,11 +2,9 @@ package com.zelyder.stocksapp.presentation.core
 
 import android.content.res.Resources
 import com.zelyder.stocksapp.R
-import kotlinx.datetime.Instant.Companion.fromEpochMilliseconds
-import kotlinx.datetime.TimeZone.Companion.currentSystemDefault
-import kotlinx.datetime.toLocalDateTime
-import java.time.Instant
-import java.time.format.TextStyle
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.abs
 
@@ -58,13 +56,14 @@ fun toPriceString(
 
 }
 
-fun Long.toDate():String {
-    val instant = fromEpochMilliseconds(this)
-    val dateTime = instant.toLocalDateTime(currentSystemDefault())
-    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        "${dateTime.dayOfMonth} ${dateTime.month.getDisplayName(TextStyle.SHORT, Locale.getDefault())} ${dateTime.year}"
-    } else {
-        "${dateTime.dayOfMonth} ${dateTime.month.name} ${dateTime.year}"
+fun Long.toDate(showTime: Boolean = false): String {
+    return if(showTime) {
+        val simpleDateFormat = SimpleDateFormat("dd MMM yyyy\n HH:mm", Locale.getDefault())
+        simpleDateFormat.format(Date(this))
+
+    }else {
+        val simpleDateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        simpleDateFormat.format(Date(this))
     }
 }
 

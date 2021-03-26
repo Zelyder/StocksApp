@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zelyder.stocksapp.domain.models.SelectedItem
 import com.zelyder.stocksapp.domain.models.StockCandle
 import com.zelyder.stocksapp.domain.repositories.DetailsRepository
 import com.zelyder.stocksapp.presentation.stockslist.StocksListViewModel
@@ -33,9 +34,9 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository): ViewMo
         super.onCleared()
     }
 
-    fun uploadChart(ticker: String) {
+    fun uploadChart(ticker: String, selectedItem: SelectedItem) {
         viewModelScope.launch(coroutineExceptionHandler) {
-            _stockCandle.value = detailsRepository.getStockCandles(ticker)
+            _stockCandle.value = detailsRepository.getStockCandles(ticker, selectedItem)
         }
     }
 

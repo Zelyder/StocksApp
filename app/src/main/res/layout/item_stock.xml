@@ -67,12 +67,12 @@
 
                 <TextView
                     android:id="@+id/tvCompanyName"
-                    android:layout_width="180dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    tools:text="Yandex, LLC" />
+                    android:maxEms="6"
+                    tools:text="Yandex, LLC"
+                    android:singleLine="true" />
             </LinearLayout>
 
             <LinearLayout
