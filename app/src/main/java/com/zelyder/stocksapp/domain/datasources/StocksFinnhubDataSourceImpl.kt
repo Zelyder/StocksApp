@@ -1,11 +1,9 @@
 package com.zelyder.stocksapp.domain.datasources
 
 import com.zelyder.stocksapp.data.FINNHUB_API_KEY
+import com.zelyder.stocksapp.data.SP_500_SYMBOL
 import com.zelyder.stocksapp.data.network.apis.FinnhubApi
-import com.zelyder.stocksapp.data.network.dto.finnhub.SearchResultDto
-import com.zelyder.stocksapp.data.network.dto.finnhub.StockCandlesDto
-import com.zelyder.stocksapp.data.network.dto.finnhub.StockInfoDto
-import com.zelyder.stocksapp.data.network.dto.finnhub.StockPriceDto
+import com.zelyder.stocksapp.data.network.dto.finnhub.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.http.Query
@@ -31,5 +29,9 @@ class StocksFinnhubDataSourceImpl(private val finnhubApi: FinnhubApi) : StocksFi
         toTimestamp: Long,
     ): StockCandlesDto  = withContext(Dispatchers.IO){
         finnhubApi.getStockCandles(FINNHUB_API_KEY, ticker, resolution, fromTimestamp, toTimestamp)
+    }
+
+    override suspend fun getIndexConstituents(): IndexConstituentsDto = withContext(Dispatchers.IO){
+        finnhubApi.getIndexConstituents(FINNHUB_API_KEY, SP_500_SYMBOL)
     }
 }

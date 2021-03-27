@@ -5,7 +5,9 @@ import com.zelyder.stocksapp.data.mappers.toEntity
 import com.zelyder.stocksapp.data.mappers.toFavoriteStock
 import com.zelyder.stocksapp.data.mappers.toStock
 import com.zelyder.stocksapp.data.mappers.toStockEntity
+import com.zelyder.stocksapp.data.network.dto.finnhub.StockPriceDto
 import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSource
+import com.zelyder.stocksapp.domain.datasources.StocksFmpDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksMboumDataSource
 import com.zelyder.stocksapp.domain.models.Stock
@@ -14,7 +16,8 @@ import kotlinx.coroutines.withContext
 import kotlin.math.round
 
 class StocksListRepositoryImpl(
-    private val mboumDataSource: StocksMboumDataSource,
+    private val fmpDataSource: StocksFmpDataSource,
+    private val finnhubDataSource: StocksFinnhubDataSource,
     private val localDataSource: StocksLocalDataSource
 ) : StocksListRepository {
     override suspend fun getStocksAsync(forceRefresh: Boolean): List<Stock> =
@@ -23,8 +26,13 @@ class StocksListRepositoryImpl(
             var stocks = localDataSource.getStocksAsync().map { it.toStock() }
 
             if (forceRefresh || stocks.isEmpty()) {
-                stocks = mboumDataSource.getMostActivesStocks().stocks.map { it.toStock() }
-                localDataSource.saveStocks(stocks.map { it.toEntity() })
+                stocks = fmpDataSource.getNasdaqConstituent().map {
+                    it.toStock(
+                        StockPriceDto(),//finnhubDataSource.getPriceByTicker(it.symbol),
+                        localDataSource.getFavoriteStockByTicker(it.symbol) != null
+                    )
+                }
+                localDataSource.saveStocks(stocks.take(15).map { it.toEntity() })
             }
 
             stocks
