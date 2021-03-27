@@ -1,17 +1,27 @@
 <resources>
     <string name="app_name">Stocks app</string>
-    <string name="currency_ru">%.2f ₽</string>
-    <string name="currency_eng">$%.2f</string>
-    <string name="delta_ru">%.2f₽ (%.2f%%)</string>
-    <string name="delta_eng">$%.2f (%.2f%%)</string>
+    <string name="currency_ru" translatable="false">%.2f ₽</string>
+    <string name="currency_eng" translatable="false">$%.2f</string>
+    <string name="delta_ru" translatable="false">%.2f₽ (%.2f%%)</string>
+    <string name="delta_eng" translatable="false">$%.2f (%.2f%%)</string>
     <string name="tv_stocks_text">Stocks</string>
     <string name="tv_favourite_text">Favourite</string>
     <string name="search_hint">Find company or ticker</string>
     <string name="tv_popular_requests_text">Popular requests</string>
     <string name="tv_recently_searched_text">You’ve searched for this</string>
-    <string name="tv_searched_error_text">Something went wrong. Please, check your connection and try again</string>
+    <string name="tv_no_connection_error_text">Something went wrong. Please, check your connection and try again</string>
     <string name="tv_searched_placeholder_text">Start typing in a search bar to find a stock</string>
     <string name="tv_searched_empty_result_text">No results matching your query</string>
     <string name="tv_searched_error_unknown_text">Unexpected error while trying to fetch stock!</string>
+    <string name="tab_chart">Chart</string>
+    <string name="tab_news">News</string>
+    <string name="chart_scale_d">D</string>
+    <string name="chart_scale_w">W</string>
+    <string name="chart_scale_m">M</string>
+    <string name="chart_scale_6m">6M</string>
+    <string name="chart_scale_1y">1Y</string>
+    <string name="chart_scale_all">All</string>
+    <string name="btn_buy_text">Buy for %s</string>
+    <string name="tab_summary">Summary</string>
 
 </resources>

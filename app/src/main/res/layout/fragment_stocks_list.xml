@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".presentation.stockslist.StocksListFragment">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayoutMain"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/ioexample.appbar"
@@ -18,6 +27,7 @@
             android:id="@+id/collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusableInTouchMode="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
             <androidx.appcompat.widget.SearchView
@@ -67,6 +77,28 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <TextView
+        android:id="@+id/tvErrorTextMainList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/tv_no_connection_error_text"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/ivNoConnectionMainList"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_cloud_off"
+        tools:ignore="ContentDescription" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvStocks"
@@ -81,6 +113,8 @@
             app:layout_constraintVertical_bias="0.0"
             tools:listitem="@layout/item_stock" />
 
+    </LinearLayout>
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

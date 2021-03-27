@@ -8,12 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.zelyder.stocksapp.R
 import com.zelyder.stocksapp.domain.models.Stock
 import com.zelyder.stocksapp.presentation.core.toDeltaString
 import com.zelyder.stocksapp.presentation.core.toPriceString
+import com.zelyder.stocksapp.presentation.details.DetailsFragmentDirections
 
 
 class StocksListAdapter(private val itemClickListener: StockListItemClickListener) : RecyclerView.Adapter<StocksListAdapter.StocksViewHolder>() {
@@ -82,6 +84,10 @@ class StocksListAdapter(private val itemClickListener: StockListItemClickListene
             }
 
             switchFav(stock.isFavorite)
+
+            cvItem.setOnClickListener {
+                it.findNavController().navigate(DetailsFragmentDirections.actionGlobalDetailsFragment(stock))
+            }
 
             ivFav.setOnClickListener {
                 stock.isFavorite = !stock.isFavorite

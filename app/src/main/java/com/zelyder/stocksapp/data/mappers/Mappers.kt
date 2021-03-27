@@ -2,12 +2,14 @@ package com.zelyder.stocksapp.data.mappers
 
 import com.zelyder.stocksapp.data.LOGO_BASE_URL
 import com.zelyder.stocksapp.data.network.dto.finnhub.FoundStockDto
+import com.zelyder.stocksapp.data.network.dto.finnhub.StockCandlesDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockInfoDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockPriceDto
 import com.zelyder.stocksapp.data.network.dto.mboum.MostActivesStockDto
 import com.zelyder.stocksapp.data.storage.entities.FavoriteEntity
 import com.zelyder.stocksapp.data.storage.entities.StockEntity
 import com.zelyder.stocksapp.domain.models.Stock
+import com.zelyder.stocksapp.domain.models.StockCandle
 import kotlin.math.abs
 import kotlin.math.round
 
@@ -99,3 +101,9 @@ fun FoundStockDto.toStock(priceDto: StockPriceDto, isFavorite: Boolean):Stock {
                 isFavorite = isFavorite
         )
 }
+
+fun StockCandlesDto.toStockCandle(): StockCandle = StockCandle(
+        this.closePrices,
+        this.statusOfResponse,
+        this.timeStamps
+)

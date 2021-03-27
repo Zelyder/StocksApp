@@ -19,4 +19,13 @@
         android:name="com.zelyder.stocksapp.presentation.searchscreen.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.zelyder.stocksapp.presentation.details.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="stock"
+            app:argType="com.zelyder.stocksapp.domain.models.Stock" />
+    </fragment>
+    <action android:id="@+id/action_global_detailsFragment" app:destination="@id/detailsFragment" />
 </navigation>

@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -98,7 +97,7 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
                 tvErrorText?.visibility = View.VISIBLE
                 recyclerView?.visibility = View.GONE
                 ivNoConnection?.visibility = View.VISIBLE
-                tvErrorText?.setText(R.string.tv_searched_error_text)
+                tvErrorText?.setText(R.string.tv_no_connection_error_text)
                 Log.e(this::class.java.name, "Something went wrong.", result.e)
             }
             is EmptyResult -> {

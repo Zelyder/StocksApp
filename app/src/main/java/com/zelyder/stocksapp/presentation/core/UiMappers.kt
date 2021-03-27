@@ -2,6 +2,10 @@ package com.zelyder.stocksapp.presentation.core
 
 import android.content.res.Resources
 import com.zelyder.stocksapp.R
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.math.abs
 
 fun toDeltaString(
@@ -51,4 +55,16 @@ fun toPriceString(
     return resources.getString(currencyTemplate, price)
 
 }
+
+fun Long.toDate(showTime: Boolean = false): String {
+    return if(showTime) {
+        val simpleDateFormat = SimpleDateFormat("dd MMM yyyy\n HH:mm", Locale.getDefault())
+        simpleDateFormat.format(Date(this))
+
+    }else {
+        val simpleDateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        simpleDateFormat.format(Date(this))
+    }
+}
+
 
