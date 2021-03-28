@@ -23,5 +23,7 @@
     <string name="chart_scale_all">All</string>
     <string name="btn_buy_text">Buy for %s</string>
     <string name="tab_summary">Summary</string>
+    <string name="btn_retry_text">Retry</string>
+    <string name="no_results">No results 😓</string>
 
 </resources>

@@ -11,6 +11,7 @@ interface StocksLocalDataSource {
     suspend fun saveStocks(stocks: List<StockEntity>)
     suspend fun saveStock(stock: StockEntity)
     suspend fun updateStock(stock: StockEntity)
+    suspend fun updateStocks(stocks: List<StockEntity>)
     suspend fun updateStockIsFavorite(ticker: String, isFavorite: Boolean)
     suspend fun deleteStockByTicker(ticker: String)
     suspend fun deleteAllStocks()

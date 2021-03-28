@@ -6,114 +6,129 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".presentation.stockslist.StocksListFragment">
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayoutMain"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
-
-    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/ioexample.appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorOnPrimary"
-        >
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusableInTouchMode="true"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            >
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/start_searchView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:defaultQueryHint="@string/search_hint"
-                app:searchIcon="@drawable/ic_search"
-                app:iconifiedByDefault="false"
-                android:theme="@style/AppSearchView"
-                android:background="@drawable/search_bg_query"
-                android:layout_marginTop="16dp"/>
-
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="12dp"
-            app:layout_collapseMode="pin"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tvStocks"
-                android:layout_width="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/ioexample.appbar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="@string/tv_stocks_text"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                />
+                android:background="?attr/colorOnPrimary">
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/collapsing"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusableInTouchMode="true"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/start_searchView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/search_bg_query"
+                        android:theme="@style/AppSearchView"
+                        app:defaultQueryHint="@string/search_hint"
+                        app:iconifiedByDefault="false"
+                        app:searchIcon="@drawable/ic_search" />
+
+
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal"
+                    app:layout_collapseMode="pin">
+
+                    <TextView
+                        android:id="@+id/tvStocks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="@string/tv_stocks_text"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvFavourite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="@string/tv_favourite_text"
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <ProgressBar
+                android:id="@+id/pbMainList"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:progressTint="?attr/colorAccent"
+                android:secondaryProgressTint="?attr/colorPrimaryDark" />
+
 
             <TextView
-                android:id="@+id/tvFavourite"
+                android:id="@+id/tvErrorTextMainList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/tv_no_connection_error_text"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/ivNoConnectionMainList"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_cloud_off"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+
+            <Button
+                android:id="@+id/btnRetryMainList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="@string/tv_favourite_text"
-                android:textColor="@color/grey"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                />
+                android:text="@string/btn_retry_text"
+                android:layout_gravity="center"/>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvStocks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:listitem="@layout/item_stock" />
+
         </LinearLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <TextView
-        android:id="@+id/tvErrorTextMainList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/tv_no_connection_error_text"
-        android:textSize="16sp"
-        android:textAlignment="center"
-        android:visibility="gone"
-        />
-
-    <ImageView
-        android:id="@+id/ivNoConnectionMainList"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:visibility="gone"
-        android:src="@drawable/ic_cloud_off"
-        tools:ignore="ContentDescription" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvStocks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/item_stock" />
-
-    </LinearLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

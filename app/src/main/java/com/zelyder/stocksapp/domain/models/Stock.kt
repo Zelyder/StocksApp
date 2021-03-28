@@ -8,9 +8,9 @@ data class Stock (
     val ticker: String = "",
     val companyName: String = "",
     val logo: String = "",
-    val price: Float = 0.0f,
+    var price: Float = 0.0f,
     val currency: String = "",
-    val dayDelta: Float = 0.0f,
-    val dayDeltaPercent: Float = 0.0f,
+    var dayDelta: Float = 0.0f,
+    var dayDeltaPercent: Float = 0.0f,
     var isFavorite: Boolean = false
 ): Parcelable

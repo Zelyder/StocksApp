@@ -5,19 +5,29 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isEmpty
+import androidx.core.view.isVisible
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.zelyder.stocksapp.R
 import com.zelyder.stocksapp.domain.models.Stock
 import com.zelyder.stocksapp.viewModelFactoryProvider
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 
 class StocksListFragment : Fragment(), StockListItemClickListener {
 
@@ -28,8 +38,12 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
     private var tvErrorText: TextView? = null
     private var ivNoConnection: ImageView? = null
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
+    private var btnRetry: Button? = null
+    private var progressBar: ProgressBar? = null
 
     private var isFavoriteTab: Boolean = false
+    private var updateJob: Job? = null
+    private val adapter = StocksListAdapter(this)
 
 
     private val viewModel: StocksListViewModel by viewModels {
@@ -55,29 +69,23 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         tvErrorText = view.findViewById(R.id.tvErrorTextMainList)
         ivNoConnection = view.findViewById(R.id.ivNoConnectionMainList)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayoutMain)
+        btnRetry = view.findViewById(R.id.btnRetryMainList)
+        progressBar = view.findViewById(R.id.pbMainList)
 
         recyclerView?.layoutManager = LinearLayoutManager(
             view.context,
             LinearLayoutManager.VERTICAL,
             false
         )
-        recyclerView?.adapter = StocksListAdapter(this)
+        initAdapter()
 
-        viewModel.stocksList.observe(this.viewLifecycleOwner) {
-            (recyclerView?.adapter as? StocksListAdapter)?.apply {
-                bindStocks(it)
-                swipeRefreshLayout?.isRefreshing = false
-                if (!it.isNullOrEmpty()) {
-                    hideNoConnectionText()
-                }
-            }
-        }
+
 
         swipeRefreshLayout?.setOnRefreshListener {
             if (isFavoriteTab) {
                 swipeRefreshLayout?.isRefreshing = false
             } else {
-                viewModel.updateList(true)
+                updateList()
             }
         }
         swipeRefreshLayout?.setColorSchemeResources(
@@ -88,12 +96,8 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         )
 
         if (savedInstanceState == null) {
-            viewModel.updateList()
-            if (viewModel.stocksList.value.isNullOrEmpty()) {
-                showNoConnectionText()
-            } else {
-                hideNoConnectionText()
-            }
+            initList()
+            updateList()
         }
 
         viewModel.isFavSelected.observe(this.viewLifecycleOwner) { isFavSelected ->
@@ -101,6 +105,10 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
                 swapTab(it)
                 isFavoriteTab = it
             }
+        }
+
+        btnRetry?.setOnClickListener {
+            adapter.retry()
         }
 
         tvStocks?.setOnClickListener {
@@ -127,6 +135,9 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         searchView = null
         tvErrorText = null
         ivNoConnection = null
+        swipeRefreshLayout = null
+        btnRetry = null
+        progressBar = null
         viewModel.resetTabState()
         super.onDestroyView()
     }
@@ -167,5 +178,75 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
     private fun hideNoConnectionText() {
         tvErrorText?.visibility = View.GONE
         ivNoConnection?.visibility = View.GONE
+    }
+
+    private fun updateList() {
+        updateJob?.cancel()
+        updateJob = lifecycleScope.launch {
+            viewModel.updatedList().collectLatest {
+                adapter.submitData(it)
+                swipeRefreshLayout?.isRefreshing = false
+            }
+        }
+    }
+
+    private fun initList() {
+        lifecycleScope.launch {
+            adapter.loadStateFlow
+                // Only emit when REFRESH LoadState changes.
+                .distinctUntilChangedBy { it.refresh }
+                // Only react to cases where REFRESH completes i.e., NotLoading.
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { recyclerView?.scrollToPosition(0) }
+        }
+    }
+    private fun initAdapter() {
+        recyclerView?.adapter =
+            adapter.withLoadStateFooter(StocksLoadStateAdapter { adapter.retry() })
+        adapter.addLoadStateListener { loadState ->
+            // show empty list
+            val isListEmpty = loadState.refresh is LoadState.NotLoading && adapter.itemCount == 0
+            showEmptyList(isListEmpty)
+
+            // Only show the list if refresh succeeds.
+            recyclerView?.isVisible = loadState.source.refresh is LoadState.NotLoading
+            // Show loading spinner during initial load or refresh.
+            progressBar?.isVisible = loadState.source.refresh is LoadState.Loading
+            // Show the retry state if initial load or refresh fails.
+
+            if(loadState.source.refresh is LoadState.Error) {
+                btnRetry?.isVisible = true
+                showNoConnectionText()
+            } else {
+                btnRetry?.isVisible = false
+                hideNoConnectionText()
+            }
+
+            // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
+            val errorState = loadState.source.append as? LoadState.Error
+                ?: loadState.source.prepend as? LoadState.Error
+                ?: loadState.append as? LoadState.Error
+                ?: loadState.prepend as? LoadState.Error
+            errorState?.let {
+                Toast.makeText(
+                    requireContext(),
+                    "\uD83D\uDE28 Wooops ${it.error}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+        }
+    }
+
+    private fun showEmptyList(show: Boolean) {
+        if (show) {
+            tvErrorText?.text = getString(R.string.no_results)
+            tvErrorText?.visibility = View.VISIBLE
+            recyclerView?.visibility = View.GONE
+        } else {
+            tvErrorText?.text = getString(R.string.tv_no_connection_error_text)
+            tvErrorText?.visibility = View.GONE
+            recyclerView?.visibility = View.VISIBLE
+        }
     }
 }

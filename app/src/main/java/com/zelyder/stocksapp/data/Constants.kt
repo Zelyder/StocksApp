@@ -10,3 +10,5 @@ const val MBOUM_BASE_URL = "https://mboum.com/api/v1/"
 const val FINNHUB_BASE_URL = "https://finnhub.io/api/v1/"
 const val FMP_BASE_URL = "https://financialmodelingprep.com/api/v3/"
 const val LOGO_BASE_URL = "https://finnhub.io/api/logo?symbol="
+const val PAGE_SIZE = 10
+const val STARTING_PAGE_INDEX = 1

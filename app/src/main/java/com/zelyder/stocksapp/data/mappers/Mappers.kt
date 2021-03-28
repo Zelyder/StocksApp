@@ -98,7 +98,7 @@ fun FoundStockDto.toStock(priceDto: StockPriceDto, isFavorite: Boolean):Stock {
                 logo = "$LOGO_BASE_URL${symbol}",
                 price = priceDto.current,
                 dayDelta = delta,
-                dayDeltaPercent = abs(delta*100.0f) / priceDto.previousClose,
+                dayDeltaPercent = if(priceDto.previousClose != 0.0f ) abs(delta*100.0f) / priceDto.previousClose else 0.0f,
                 isFavorite = isFavorite
         )
 }
@@ -117,7 +117,27 @@ fun NasdaqConstituentDto.toStock(priceDto: StockPriceDto, isFavorite: Boolean):S
                 logo = "$LOGO_BASE_URL${symbol}",
                 price = priceDto.current,
                 dayDelta = delta,
-                dayDeltaPercent = abs(delta*100.0f) / priceDto.previousClose,
+                dayDeltaPercent = if(priceDto.previousClose != 0.0f ) abs(delta*100.0f) / priceDto.previousClose else 0.0f,
                 isFavorite = isFavorite
         )
+}
+
+fun NasdaqConstituentDto.toEntity(priceDto: StockPriceDto, isFavorite: Boolean): StockEntity{
+        val delta = priceDto.current - priceDto.previousClose
+        return StockEntity(
+                ticker = symbol,
+                companyName = name,
+                logo = "$LOGO_BASE_URL${symbol}",
+                price = priceDto.current,
+                dayDelta = delta,
+                dayDeltaPercent = if(priceDto.previousClose != 0.0f ) abs(delta*100.0f) / priceDto.previousClose else 0.0f,
+                isFavorite = isFavorite
+        )
+}
+
+fun Stock.updatePrice(priceDto: StockPriceDto) {
+        val delta = priceDto.current - priceDto.previousClose
+        this.price = priceDto.current
+        this.dayDelta = delta
+        this.dayDeltaPercent = if(priceDto.previousClose != 0.0f ) abs(delta*100.0f) / priceDto.previousClose else 0.0f
 }

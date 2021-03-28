@@ -29,6 +29,10 @@ class StocksLocalDataSourceImpl(private val stocksDb: StocksDb): StocksLocalData
         stocksDb.stocksDao().updateStock(stock)
     }
 
+    override suspend fun updateStocks(stocks: List<StockEntity>) {
+        stocksDb.stocksDao().updateStock(stocks)
+    }
+
     override suspend fun updateStockIsFavorite(ticker: String, isFavorite: Boolean) = withContext(Dispatchers.IO){
         stocksDb.stocksDao().updateIsFavoriteByTicker(ticker, isFavorite)
     }
