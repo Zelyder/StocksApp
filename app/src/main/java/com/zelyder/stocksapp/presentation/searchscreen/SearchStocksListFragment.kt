@@ -10,16 +10,23 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zelyder.stocksapp.R
 import com.zelyder.stocksapp.domain.models.Stock
 import com.zelyder.stocksapp.presentation.stockslist.StockListItemClickListener
 import com.zelyder.stocksapp.presentation.stockslist.StocksListAdapter
+import com.zelyder.stocksapp.presentation.stockslist.StocksLoadStateAdapter
 import com.zelyder.stocksapp.viewModelFactoryProvider
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
 class SearchStocksListFragment : Fragment(), StockListItemClickListener {
@@ -33,9 +40,10 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
     private var pbSearch: ProgressBar? = null
     private var tvErrorText: TextView? = null
     private var ivNoConnection: ImageView? = null
-    private lateinit var stocksAdapter: StocksListAdapter
+    private val stocksAdapter = StocksListAdapter(this)
 
     private var query: String? = null
+    private var searchJob: Job? = null
 
 
     override fun onCreateView(
@@ -45,6 +53,7 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
         return inflater.inflate(R.layout.fragment_search_stocks_list, container, false)
     }
 
+    @InternalCoroutinesApi
     @FlowPreview
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,13 +68,13 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
             LinearLayoutManager.VERTICAL,
             false
         )
-        stocksAdapter = StocksListAdapter(this)
-        recyclerView?.adapter = stocksAdapter
-
-        viewModel.stocksList.observe(this.viewLifecycleOwner, ::handleSearchListResult)
-        viewModel.searchState.observe(viewLifecycleOwner, ::handleLoadingState)
+        initAdapter()
         query = arguments?.getString(KEY_QUERY)
-        query?.let { viewModel.searchStock(it) }
+
+        query?.let {
+            initSearch(it)
+            search(it)
+        }
     }
 
     override fun onDestroyView() {
@@ -73,55 +82,6 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
         recyclerView = null
         pbSearch = null
 
-    }
-
-    private fun handleLoadingState(state: SearchState) {
-        when (state) {
-            Loading -> {
-                pbSearch?.visibility = View.VISIBLE
-            }
-            Ready -> {
-                pbSearch?.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun handleSearchListResult(result: SearchResult) {
-        when (result) {
-            is ValidResult -> {
-                query?.let { viewModel.saveQuery(it) }
-                stocksAdapter.bindStocks(result.result)
-            }
-            is ErrorResult -> {
-                stocksAdapter.bindStocks(emptyList())
-                tvErrorText?.visibility = View.VISIBLE
-                recyclerView?.visibility = View.GONE
-                ivNoConnection?.visibility = View.VISIBLE
-                tvErrorText?.setText(R.string.tv_no_connection_error_text)
-                Log.e(this::class.java.name, "Something went wrong.", result.e)
-            }
-            is EmptyResult -> {
-                stocksAdapter.bindStocks(emptyList())
-                tvErrorText?.visibility = View.VISIBLE
-                recyclerView?.visibility = View.GONE
-                ivNoConnection?.visibility = View.GONE
-                tvErrorText?.setText(R.string.tv_searched_empty_result_text)
-            }
-            is EmptyQuery -> {
-                stocksAdapter.bindStocks(emptyList())
-                tvErrorText?.visibility = View.VISIBLE
-                recyclerView?.visibility = View.GONE
-                ivNoConnection?.visibility = View.GONE
-                tvErrorText?.setText(R.string.tv_searched_placeholder_text)
-            }
-            is TerminalError -> {
-                Toast.makeText(
-                    activity,
-                    getString(R.string.tv_searched_error_unknown_text),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
     }
 
     companion object {
@@ -136,6 +96,80 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
 
     override fun onClickFavourite(stock: Stock) {
         viewModel.updateFavState(stock)
+    }
+
+    @InternalCoroutinesApi
+    private fun initSearch(query: String) {
+        lifecycleScope.launch {
+            stocksAdapter.loadStateFlow
+                // Only emit when REFRESH LoadState for RemoteMediator changes.
+                .distinctUntilChangedBy { it.refresh }
+                // Only react to cases where Remote REFRESH completes i.e., NotLoading.
+                .filter { it.refresh is LoadState.NotLoading && stocksAdapter.itemCount != 0}
+                .collect { viewModel.saveQuery(query) }
+        }
+    }
+
+    @FlowPreview
+    private fun search(query: String) {
+        // Make sure we cancel the previous job before creating a new one
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
+            viewModel.searchStock(query).collectLatest {
+                stocksAdapter.submitData(it)
+            }
+        }
+    }
+
+    private fun initAdapter() {
+        recyclerView?.adapter = stocksAdapter
+            .withLoadStateFooter(StocksLoadStateAdapter { stocksAdapter.retry() })
+        stocksAdapter.addLoadStateListener { loadState ->
+
+            // show empty list
+            val isListEmpty =
+                loadState.refresh is LoadState.NotLoading && stocksAdapter.itemCount == 0
+            showEmptyList(isListEmpty)
+
+            recyclerView?.isVisible = loadState.source.refresh is LoadState.NotLoading
+            // Show loading spinner during initial load or refresh.
+            pbSearch?.isVisible = loadState.source.refresh is LoadState.Loading
+            // Show the retry state if initial load or refresh fails.
+
+            if (loadState.source.refresh is LoadState.Error) {
+                searchJob?.cancel()
+                tvErrorText?.visibility = View.VISIBLE
+                recyclerView?.visibility = View.GONE
+                ivNoConnection?.visibility = View.VISIBLE
+                tvErrorText?.setText(R.string.tv_no_connection_error_text)
+            }
+
+            // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
+            val errorState = loadState.source.append as? LoadState.Error
+                ?: loadState.source.prepend as? LoadState.Error
+                ?: loadState.append as? LoadState.Error
+                ?: loadState.prepend as? LoadState.Error
+            errorState?.let {
+                Toast.makeText(
+                    requireContext(),
+                    "\uD83D\uDE28 Wooops ${it.error}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+        }
+    }
+
+    private fun showEmptyList(show: Boolean) {
+        if (show) {
+            tvErrorText?.text = getString(R.string.no_results)
+            tvErrorText?.visibility = View.VISIBLE
+            recyclerView?.visibility = View.GONE
+        } else {
+            tvErrorText?.text = getString(R.string.tv_no_connection_error_text)
+            tvErrorText?.visibility = View.GONE
+            recyclerView?.visibility = View.VISIBLE
+        }
     }
 }
 

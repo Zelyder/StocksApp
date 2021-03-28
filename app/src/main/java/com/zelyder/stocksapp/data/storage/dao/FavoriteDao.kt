@@ -22,6 +22,9 @@ interface FavoriteDao {
     @Update
     suspend fun updateStock(stock: FavoriteEntity)
 
+    @Update
+    suspend fun updateStocks(stocks: List<FavoriteEntity>)
+
     @Query("UPDATE ${DbContract.Favorites.TABLE_NAME} SET ${DbContract.Stocks.COLUMN_NAME_FAVORITE} = :isFavorite WHERE ${DbContract.Stocks.COLUMN_NAME_TICKER} == :ticker")
     suspend fun updateIsFavoriteByTicker(ticker: String, isFavorite: Boolean)
 

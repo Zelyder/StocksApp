@@ -1,15 +1,22 @@
 package com.zelyder.stocksapp.domain.repositories
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.zelyder.stocksapp.data.PAGE_SIZE
 import com.zelyder.stocksapp.data.mappers.toEntity
 import com.zelyder.stocksapp.data.mappers.toFavoriteStock
 import com.zelyder.stocksapp.data.mappers.toStock
+import com.zelyder.stocksapp.data.storage.db.StocksPagingSource
 import com.zelyder.stocksapp.data.storage.entities.PopularQueriesEntity
 import com.zelyder.stocksapp.data.storage.entities.RecentQueriesEntity
 import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksMboumDataSource
 import com.zelyder.stocksapp.domain.models.Stock
+import com.zelyder.stocksapp.presentation.searchscreen.SearchPagingSource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class SearchRepositoryImpl(
@@ -17,14 +24,14 @@ class SearchRepositoryImpl(
     private val finnhubDataSource: StocksFinnhubDataSource,
     private val localDataSource: StocksLocalDataSource
 ) : SearchRepository {
-    override suspend fun searchStock(query: String): List<Stock> = withContext(Dispatchers.IO) {
-        // Removing regional ticker
-        val stocks = finnhubDataSource.searchStock(query).foundStocks.filter { !it.symbol.contains(".") }.map {
-            it.toStock(finnhubDataSource.getPriceByTicker(it.symbol),
-                localDataSource.getFavoriteStockByTicker(it.symbol) != null
-            )
-        }
-        stocks
+    override fun searchStock(query: String): Flow<PagingData<Stock>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { SearchPagingSource(localDataSource, finnhubDataSource, query) }
+        ).flow
     }
 
     override suspend fun updateStocksIsFavoriteAsync(stock: Stock) =

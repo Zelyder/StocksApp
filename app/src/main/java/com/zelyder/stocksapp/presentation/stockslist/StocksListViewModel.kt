@@ -29,11 +29,12 @@ class StocksListViewModel(private val stocksListRepository: StocksListRepository
             return newResult
     }
 
-    fun swapToStocksTab() {
+    fun swapToStocksTab(): Flow<PagingData<Stock>>? {
         if (_isFavSelected.value == true) {
             _isFavSelected.value = false
-            updatedList()
+            return updatedList()
         }
+        return null
     }
 
     fun updateFavState(stock: Stock) {
@@ -43,13 +44,14 @@ class StocksListViewModel(private val stocksListRepository: StocksListRepository
         }
     }
 
-    fun swapToFavTab() {
+    fun swapToFavTab():Flow<PagingData<Stock>>? {
         if (_isFavSelected.value == false || _isFavSelected.value == null) {
             _isFavSelected.value = true
-            viewModelScope.launch(coroutineExceptionHandler) {
-               // _stocksList.value = stocksListRepository.getFavoritesAsync()
-            }
+            val newResult: Flow<PagingData<Stock>> = stocksListRepository.getFavoritesAsync().cachedIn(viewModelScope)
+            _stocksList = newResult
+            return newResult
         }
+        return null
     }
 
     fun resetTabState() {

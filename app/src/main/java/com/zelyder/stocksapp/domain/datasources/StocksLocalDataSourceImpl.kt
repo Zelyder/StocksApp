@@ -53,6 +53,10 @@ class StocksLocalDataSourceImpl(private val stocksDb: StocksDb): StocksLocalData
         stocksDb.favoriteDao().getAllStocks()
     }
 
+    override suspend fun updateFavoritesStock(stocks: List<FavoriteEntity>) = withContext(Dispatchers.IO){
+        stocksDb.favoriteDao().updateStocks(stocks)
+    }
+
     override suspend fun addFavoriteStock(stock: FavoriteEntity) = withContext(Dispatchers.IO){
         stocksDb.favoriteDao().addStock(stock)
     }

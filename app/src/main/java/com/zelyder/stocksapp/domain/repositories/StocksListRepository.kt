@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface StocksListRepository {
     fun getStocksAsync(forceRefresh: Boolean = false): Flow<PagingData<Stock>>
     suspend fun updateStocksIsFavoriteAsync(stock: Stock)
-    suspend fun getFavoritesAsync(): List<Stock>
+    fun getFavoritesAsync(): Flow<PagingData<Stock>>
 }

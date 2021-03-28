@@ -18,6 +18,7 @@ interface StocksLocalDataSource {
 
     suspend fun getFavoriteStockByTicker(ticker: String): FavoriteEntity?
     suspend fun getFavoritesStocks(): List<FavoriteEntity>?
+    suspend fun updateFavoritesStock(stocks: List<FavoriteEntity>)
     suspend fun addFavoriteStock(stock: FavoriteEntity)
     suspend fun deleteFavoriteStockByTicker(ticker: String)
 

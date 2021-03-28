@@ -112,11 +112,11 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         }
 
         tvStocks?.setOnClickListener {
-            viewModel.swapToStocksTab()
+            swapToStocksTab()
         }
 
         tvFavorites?.setOnClickListener {
-            viewModel.swapToFavTab()
+            swapToFavTab()
         }
 
         searchView?.setOnQueryTextFocusChangeListener { _, hasFocus ->
@@ -184,6 +184,25 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         updateJob?.cancel()
         updateJob = lifecycleScope.launch {
             viewModel.updatedList().collectLatest {
+                adapter.submitData(it)
+                swipeRefreshLayout?.isRefreshing = false
+            }
+        }
+    }
+    private fun swapToFavTab() {
+        updateJob?.cancel()
+        updateJob = lifecycleScope.launch {
+            viewModel.swapToFavTab()?.collectLatest {
+                adapter.submitData(it)
+                swipeRefreshLayout?.isRefreshing = false
+            }
+        }
+    }
+
+    private fun swapToStocksTab() {
+        updateJob?.cancel()
+        updateJob = lifecycleScope.launch {
+            viewModel.swapToStocksTab()?.collectLatest {
                 adapter.submitData(it)
                 swipeRefreshLayout?.isRefreshing = false
             }

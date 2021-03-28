@@ -49,12 +49,6 @@ class StocksListAdapter(private val itemClickListener: StockListItemClickListene
 
     }
 
-    fun bindStocks(newStocks: List<Stock>) {
-        //FIXME: replace this
-        //submitData(newStocks)
-        //notifyDataSetChanged()
-    }
-
     inner class StocksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cvItem: CardView = itemView.findViewById(R.id.cvItem)
         private val tvTicker: TextView = itemView.findViewById(R.id.tvTicker)

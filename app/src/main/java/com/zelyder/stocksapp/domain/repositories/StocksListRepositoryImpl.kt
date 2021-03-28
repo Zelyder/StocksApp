@@ -19,6 +19,7 @@ import com.zelyder.stocksapp.domain.datasources.StocksFmpDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksMboumDataSource
 import com.zelyder.stocksapp.domain.models.Stock
+import com.zelyder.stocksapp.presentation.stockslist.FavoritesPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -52,8 +53,14 @@ class StocksListRepositoryImpl(
 
     }
 
-    override suspend fun getFavoritesAsync(): List<Stock> = withContext(Dispatchers.IO) {
-        localDataSource.getFavoritesStocks()?.map { it.toStock() } ?: listOf()
+    override fun getFavoritesAsync(): Flow<PagingData<Stock>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { FavoritesPagingSource(localDataSource, finnhubDataSource) }
+        ).flow
     }
 
 }
