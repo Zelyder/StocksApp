@@ -105,7 +105,7 @@ class DetailsFragment : Fragment() {
 
         var selectedItem: SelectedItem? = null
         var showTime = true
-        cgScaleChart.setOnCheckedChangeListener { group, checkedId ->
+        cgScaleChart.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.cDay -> {
                     selectedItem = SelectedItem.DAY
@@ -160,6 +160,7 @@ class DetailsFragment : Fragment() {
             resources
         )
 
+        // Share price including commission
         btnBuy.text = resources.getString(
             R.string.btn_buy_text,
             toPriceString(tempStock.price * COMMISSION_MULTIPLIER, tempStock.currency, resources)
