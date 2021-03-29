@@ -9,8 +9,8 @@ import com.zelyder.stocksapp.data.storage.dao.*
 import com.zelyder.stocksapp.data.storage.entities.*
 
 @Database(
-    entities = [StockEntity::class, FavoriteEntity::class, RecentQueriesEntity::class, PopularQueriesEntity::class, RemoteKeysEntity::class],
-    version = 7,
+    entities = [StockEntity::class, FavoriteEntity::class, RecentQueriesEntity::class, PopularQueriesEntity::class],
+    version = 8,
     exportSchema = false
 )
 abstract class StocksDb : RoomDatabase() {
@@ -19,7 +19,6 @@ abstract class StocksDb : RoomDatabase() {
     abstract fun favoriteDao(): FavoriteDao
     abstract fun recentQueriesDao(): RecentQueriesDao
     abstract fun popularQueriesDao(): PopularQueriesDao
-    abstract fun remoteKeysDao(): RemoteKeysDao
 
     companion object {
         fun create(context: Context): StocksDb = Room.databaseBuilder(
