@@ -1,9 +1,11 @@
 package com.zelyder.stocksapp.presentation.searchscreen
 
+import androidx.paging.PagingData
 import com.zelyder.stocksapp.domain.models.Stock
+import kotlinx.coroutines.flow.Flow
 
 sealed class SearchResult
-data class ValidResult(val result: List<Stock>) : SearchResult()
+data class ValidResult(val result: Flow<PagingData<Stock>>): SearchResult()
 object EmptyResult : SearchResult()
 object EmptyQuery : SearchResult()
 data class ErrorResult(val e: Throwable) : SearchResult()

@@ -4,6 +4,7 @@ import androidx.room.*
 import com.zelyder.stocksapp.data.storage.DbContract
 import com.zelyder.stocksapp.data.storage.entities.StockEntity
 
+
 @Dao
 interface StocksDao {
     @Query("SELECT * FROM ${DbContract.Stocks.TABLE_NAME}")
@@ -20,6 +21,9 @@ interface StocksDao {
 
     @Update
     suspend fun updateStock(stock: StockEntity)
+
+    @Update
+    suspend fun updateStocks(stocks: List<StockEntity>)
 
     @Query("UPDATE ${DbContract.Stocks.TABLE_NAME} SET ${DbContract.Stocks.COLUMN_NAME_FAVORITE} = :isFavorite WHERE ${DbContract.Stocks.COLUMN_NAME_TICKER} == :ticker")
     suspend fun updateIsFavoriteByTicker(ticker: String, isFavorite: Boolean)

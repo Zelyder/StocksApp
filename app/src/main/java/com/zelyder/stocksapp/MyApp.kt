@@ -7,6 +7,7 @@ import com.zelyder.stocksapp.data.network.StocksNetworkModule
 import com.zelyder.stocksapp.data.network.WebServicesProvider
 import com.zelyder.stocksapp.data.storage.db.StocksDb
 import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSourceImpl
+import com.zelyder.stocksapp.domain.datasources.StocksFmpDataSourceImpl
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSourceImpl
 import com.zelyder.stocksapp.domain.datasources.StocksMboumDataSourceImpl
 import com.zelyder.stocksapp.domain.repositories.*
@@ -22,6 +23,7 @@ class MyApp : Application(), ViewModelFactoryProvider {
     private lateinit var stocksListRepository: StocksListRepository
     private lateinit var searchRepository: SearchRepository
     private lateinit var detailsRepository: DetailsRepository
+
     @ExperimentalSerializationApi
     private lateinit var networkModule: StocksNetworkModule
 
@@ -33,10 +35,10 @@ class MyApp : Application(), ViewModelFactoryProvider {
         networkModule = StocksNetworkModule()
         initRepositories()
 
-        viewModelFactory = ViewModelFactory(stocksListRepository, searchRepository, detailsRepository)
+        viewModelFactory =
+            ViewModelFactory(stocksListRepository, searchRepository, detailsRepository)
 
     }
-
 
 
     @ExperimentalCoroutinesApi
@@ -45,12 +47,14 @@ class MyApp : Application(), ViewModelFactoryProvider {
 
         val mboumDataSource = StocksMboumDataSourceImpl(networkModule.mboumApi())
         val finnhubDataSource = StocksFinnhubDataSourceImpl(networkModule.finnhubApi())
+        val fmpDataSource = StocksFmpDataSourceImpl(networkModule.fmpApi())
         val localDataSource = StocksLocalDataSourceImpl(StocksDb.create(applicationContext))
 
         stocksListRepository =
-            StocksListRepositoryImpl(mboumDataSource, localDataSource)
+            StocksListRepositoryImpl(fmpDataSource, finnhubDataSource, localDataSource)
         searchRepository = SearchRepositoryImpl(mboumDataSource, finnhubDataSource, localDataSource)
-        detailsRepository = DetailsRepositoryImpl(finnhubDataSource, localDataSource, WebServicesProvider())
+        detailsRepository =
+            DetailsRepositoryImpl(finnhubDataSource, localDataSource, WebServicesProvider())
     }
 
     override fun viewModelFactory(): ViewModelFactory = viewModelFactory

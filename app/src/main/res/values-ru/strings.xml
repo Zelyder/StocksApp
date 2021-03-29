@@ -20,4 +20,6 @@
     <string name="chart_scale_1y">1Г</string>
     <string name="btn_buy_text">Купить за %s</string>
     <string name="chart_scale_all">Все</string>
+    <string name="btn_retry_text">Повторить</string>
+    <string name="no_results">Нет результатов 😓</string>
 </resources>

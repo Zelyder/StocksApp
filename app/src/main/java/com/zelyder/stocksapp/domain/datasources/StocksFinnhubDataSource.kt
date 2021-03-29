@@ -1,9 +1,6 @@
 package com.zelyder.stocksapp.domain.datasources
 
-import com.zelyder.stocksapp.data.network.dto.finnhub.SearchResultDto
-import com.zelyder.stocksapp.data.network.dto.finnhub.StockCandlesDto
-import com.zelyder.stocksapp.data.network.dto.finnhub.StockInfoDto
-import com.zelyder.stocksapp.data.network.dto.finnhub.StockPriceDto
+import com.zelyder.stocksapp.data.network.dto.finnhub.*
 
 interface StocksFinnhubDataSource {
     suspend fun searchStock(query: String): SearchResultDto
@@ -15,4 +12,5 @@ interface StocksFinnhubDataSource {
         fromTimestamp: Long,
         toTimestamp: Long,
     ): StockCandlesDto
+    suspend fun getIndexConstituents(): IndexConstituentsDto
 }

@@ -5,6 +5,7 @@ import com.zelyder.stocksapp.data.network.dto.finnhub.FoundStockDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockCandlesDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockInfoDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockPriceDto
+import com.zelyder.stocksapp.data.network.dto.fmp.NasdaqConstituentDto
 import com.zelyder.stocksapp.data.network.dto.mboum.MostActivesStockDto
 import com.zelyder.stocksapp.data.storage.entities.FavoriteEntity
 import com.zelyder.stocksapp.data.storage.entities.StockEntity
@@ -97,7 +98,7 @@ fun FoundStockDto.toStock(priceDto: StockPriceDto, isFavorite: Boolean):Stock {
                 logo = "$LOGO_BASE_URL${symbol}",
                 price = priceDto.current,
                 dayDelta = delta,
-                dayDeltaPercent = abs(delta*100.0f) / priceDto.previousClose,
+                dayDeltaPercent = if(priceDto.previousClose != 0.0f ) abs(delta*100.0f) / priceDto.previousClose else 0.0f,
                 isFavorite = isFavorite
         )
 }
@@ -107,3 +108,36 @@ fun StockCandlesDto.toStockCandle(): StockCandle = StockCandle(
         this.statusOfResponse,
         this.timeStamps
 )
+
+fun NasdaqConstituentDto.toStock(priceDto: StockPriceDto, isFavorite: Boolean):Stock {
+        val delta = priceDto.current - priceDto.previousClose
+        return Stock(
+                ticker = symbol,
+                companyName = name,
+                logo = "$LOGO_BASE_URL${symbol}",
+                price = priceDto.current,
+                dayDelta = delta,
+                dayDeltaPercent = if(priceDto.previousClose != 0.0f ) abs(delta*100.0f) / priceDto.previousClose else 0.0f,
+                isFavorite = isFavorite
+        )
+}
+
+fun NasdaqConstituentDto.toEntity(priceDto: StockPriceDto, isFavorite: Boolean): StockEntity{
+        val delta = priceDto.current - priceDto.previousClose
+        return StockEntity(
+                ticker = symbol,
+                companyName = name,
+                logo = "$LOGO_BASE_URL${symbol}",
+                price = priceDto.current,
+                dayDelta = delta,
+                dayDeltaPercent = if(priceDto.previousClose != 0.0f ) abs(delta*100.0f) / priceDto.previousClose else 0.0f,
+                isFavorite = isFavorite
+        )
+}
+
+fun Stock.updatePrice(priceDto: StockPriceDto) {
+        val delta = priceDto.current - priceDto.previousClose
+        this.price = priceDto.current
+        this.dayDelta = delta
+        this.dayDeltaPercent = if(priceDto.previousClose != 0.0f ) abs(delta*100.0f) / priceDto.previousClose else 0.0f
+}

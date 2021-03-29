@@ -12,6 +12,7 @@ import com.google.android.material.chip.ChipGroup
 import com.zelyder.stocksapp.R
 import com.zelyder.stocksapp.presentation.core.hideKeyboard
 import com.zelyder.stocksapp.presentation.core.showKeyboard
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 class SearchFragment : Fragment() {
@@ -25,6 +26,7 @@ class SearchFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -68,5 +70,7 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         searchView = null
     }
+
+
 
 }

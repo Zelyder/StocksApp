@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.zelyder.stocksapp.R
@@ -18,9 +20,8 @@ import com.zelyder.stocksapp.presentation.core.toPriceString
 import com.zelyder.stocksapp.presentation.details.DetailsFragmentDirections
 
 
-class StocksListAdapter(private val itemClickListener: StockListItemClickListener) : RecyclerView.Adapter<StocksListAdapter.StocksViewHolder>() {
-
-    private var stocks = listOf<Stock>()
+class StocksListAdapter(private val itemClickListener: StockListItemClickListener) :
+    PagingDataAdapter<Stock, StocksListAdapter.StocksViewHolder>(STOCKS_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StocksViewHolder {
         return StocksViewHolder(
@@ -34,21 +35,18 @@ class StocksListAdapter(private val itemClickListener: StockListItemClickListene
             val typedValue = TypedValue()
             holder.cvItem.context.theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true)
             holder.cvItem.setCardBackgroundColor(typedValue.data)
-        }else {
+        } else {
             val typedValue = TypedValue()
-            holder.cvItem.context.theme.resolveAttribute(R.attr.cardBackgroundColor, typedValue, true)
+            holder.cvItem.context.theme.resolveAttribute(
+                R.attr.cardBackgroundColor,
+                typedValue,
+                true
+            )
             holder.cvItem.setCardBackgroundColor(typedValue.data)
         }
-        holder.bind(stocks[position])
+        getItem(position)?.let { holder.bind(it) }
 
 
-    }
-
-    override fun getItemCount(): Int = stocks.size
-
-    fun bindStocks(newStocks: List<Stock>) {
-        stocks = newStocks
-        notifyDataSetChanged()
     }
 
     inner class StocksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -86,7 +84,8 @@ class StocksListAdapter(private val itemClickListener: StockListItemClickListene
             switchFav(stock.isFavorite)
 
             cvItem.setOnClickListener {
-                it.findNavController().navigate(DetailsFragmentDirections.actionGlobalDetailsFragment(stock))
+                it.findNavController()
+                    .navigate(DetailsFragmentDirections.actionGlobalDetailsFragment(stock))
             }
 
             ivFav.setOnClickListener {
@@ -103,6 +102,15 @@ class StocksListAdapter(private val itemClickListener: StockListItemClickListene
                     false -> R.drawable.ic_fav_none
                 }
             )
+        }
+    }
+    companion object {
+        private val STOCKS_COMPARATOR = object : DiffUtil.ItemCallback<Stock>() {
+            override fun areItemsTheSame(oldItem: Stock, newItem: Stock): Boolean =
+                oldItem.ticker == newItem.ticker
+
+            override fun areContentsTheSame(oldItem: Stock, newItem: Stock): Boolean =
+                oldItem == newItem
         }
     }
 }
