@@ -5,14 +5,12 @@ import com.zelyder.stocksapp.data.network.SocketUpdate
 import com.zelyder.stocksapp.data.network.WebServicesProvider
 import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSource
-import com.zelyder.stocksapp.domain.models.SelectedItem
+import com.zelyder.stocksapp.domain.enums.SelectedItem
 import com.zelyder.stocksapp.domain.models.StockCandle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
-import okhttp3.WebSocket
-import java.sql.Timestamp
 
 class DetailsRepositoryImpl @ExperimentalCoroutinesApi constructor(
     private val finnhubDataSource: StocksFinnhubDataSource,
@@ -28,6 +26,7 @@ class DetailsRepositoryImpl @ExperimentalCoroutinesApi constructor(
             val fromTimestamp: Long
             val toTimestamp: Long = System.currentTimeMillis()
 
+            // Assigning chart scaling parameters
             when (selectedItem) {
                 SelectedItem.DAY -> {
                     resolution = "5"

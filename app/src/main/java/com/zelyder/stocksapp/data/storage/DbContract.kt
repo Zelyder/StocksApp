@@ -33,12 +33,4 @@ object DbContract {
         const val COLUMN_NAME_QUERY = "popularQuery"
     }
 
-    object RemoteKeys {
-        const val TABLE_NAME = "remoteKeys"
-
-        const val COLUMN_NAME_TICKER = "ticker"
-        const val COLUMN_NAME_PREV_KEY = "prevKey"
-        const val COLUMN_NAME_NEXT_KEY = "nextKey"
-    }
-
 }

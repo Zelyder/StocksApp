@@ -9,6 +9,8 @@ import okhttp3.Request
 import okhttp3.WebSocket
 import java.util.concurrent.TimeUnit
 
+// I was close to updating the price in real time, but it only worked for the first stock
+// and the following requests were rejected :(
 @ExperimentalCoroutinesApi
 class WebServicesProvider {
 

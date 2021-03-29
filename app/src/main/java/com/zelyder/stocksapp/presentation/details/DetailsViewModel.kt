@@ -1,18 +1,14 @@
 package com.zelyder.stocksapp.presentation.details
 
 import android.util.Log
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zelyder.stocksapp.domain.models.SelectedItem
+import com.zelyder.stocksapp.domain.enums.SelectedItem
 import com.zelyder.stocksapp.domain.models.StockCandle
 import com.zelyder.stocksapp.domain.repositories.DetailsRepository
-import com.zelyder.stocksapp.presentation.stockslist.StocksListViewModel
-import com.zelyder.stocksapp.viewModelFactoryProvider
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
@@ -40,6 +36,7 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository): ViewMo
         }
     }
 
+    // Here I tried to add Web Socket
     @ExperimentalCoroutinesApi
     fun subscribeToSocketEvents(ticker: String) {
         viewModelScope.launch(coroutineExceptionHandler) {

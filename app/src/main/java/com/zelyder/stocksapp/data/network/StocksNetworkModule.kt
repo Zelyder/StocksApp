@@ -1,7 +1,6 @@
 package com.zelyder.stocksapp.data.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.zelyder.stocksapp.data.FINNHUB_API_KEY
 import com.zelyder.stocksapp.data.FINNHUB_BASE_URL
 import com.zelyder.stocksapp.data.FMP_BASE_URL
 import com.zelyder.stocksapp.data.MBOUM_BASE_URL
@@ -11,9 +10,6 @@ import com.zelyder.stocksapp.data.network.apis.MboumApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.WebSocket
 import retrofit2.Retrofit
 import retrofit2.create
 

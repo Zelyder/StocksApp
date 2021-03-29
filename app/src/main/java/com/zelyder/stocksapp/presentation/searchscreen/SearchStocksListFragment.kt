@@ -1,7 +1,6 @@
 package com.zelyder.stocksapp.presentation.searchscreen
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -134,8 +133,8 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
             recyclerView?.isVisible = loadState.source.refresh is LoadState.NotLoading
             // Show loading spinner during initial load or refresh.
             pbSearch?.isVisible = loadState.source.refresh is LoadState.Loading
-            // Show the retry state if initial load or refresh fails.
 
+            // Show the retry state if initial load or refresh fails.
             if (loadState.source.refresh is LoadState.Error) {
                 searchJob?.cancel()
                 tvErrorText?.visibility = View.VISIBLE
@@ -144,7 +143,7 @@ class SearchStocksListFragment : Fragment(), StockListItemClickListener {
                 tvErrorText?.setText(R.string.tv_no_connection_error_text)
             }
 
-            // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
+            // Toast on any error
             val errorState = loadState.source.append as? LoadState.Error
                 ?: loadState.source.prepend as? LoadState.Error
                 ?: loadState.append as? LoadState.Error
