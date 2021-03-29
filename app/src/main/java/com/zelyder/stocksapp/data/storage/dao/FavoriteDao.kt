@@ -1,5 +1,6 @@
 package com.zelyder.stocksapp.data.storage.dao
 
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.zelyder.stocksapp.data.storage.DbContract
 import com.zelyder.stocksapp.data.storage.entities.FavoriteEntity
@@ -11,7 +12,7 @@ interface FavoriteDao {
     suspend fun getAllStocks(): List<FavoriteEntity>
 
     @Query("SELECT * FROM ${DbContract.Favorites.TABLE_NAME} WHERE ${DbContract.Stocks.COLUMN_NAME_TICKER} == :ticker")
-    suspend fun getStockByTicker(ticker: String): FavoriteEntity
+    suspend fun getStockByTicker(ticker: String): FavoriteEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAllStocks(stocks: List<FavoriteEntity>)

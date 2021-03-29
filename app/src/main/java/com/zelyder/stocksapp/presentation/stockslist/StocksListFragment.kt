@@ -23,11 +23,8 @@ import com.zelyder.stocksapp.R
 import com.zelyder.stocksapp.domain.models.Stock
 import com.zelyder.stocksapp.viewModelFactoryProvider
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.collect
 
 class StocksListFragment : Fragment(), StockListItemClickListener {
 
@@ -83,9 +80,9 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
 
         swipeRefreshLayout?.setOnRefreshListener {
             if (isFavoriteTab) {
-                swipeRefreshLayout?.isRefreshing = false
+                swapToFavTab(true)
             } else {
-                updateList()
+                updateList(true)
             }
         }
         swipeRefreshLayout?.setColorSchemeResources(
@@ -180,21 +177,20 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         ivNoConnection?.visibility = View.GONE
     }
 
-    private fun updateList() {
+    private fun updateList(forceRefresh: Boolean = false) {
         updateJob?.cancel()
         updateJob = lifecycleScope.launch {
-            viewModel.updatedList().collectLatest {
+            viewModel.updatedList(forceRefresh).collectLatest {
                 adapter.submitData(it)
-                swipeRefreshLayout?.isRefreshing = false
             }
         }
     }
-    private fun swapToFavTab() {
+
+    private fun swapToFavTab(forceRefresh: Boolean = false) {
         updateJob?.cancel()
         updateJob = lifecycleScope.launch {
-            viewModel.swapToFavTab()?.collectLatest {
+            viewModel.swapToFavTab(forceRefresh)?.collectLatest {
                 adapter.submitData(it)
-                swipeRefreshLayout?.isRefreshing = false
             }
         }
     }
@@ -204,7 +200,6 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
         updateJob = lifecycleScope.launch {
             viewModel.swapToStocksTab()?.collectLatest {
                 adapter.submitData(it)
-                swipeRefreshLayout?.isRefreshing = false
             }
         }
     }
@@ -216,9 +211,13 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
                 .distinctUntilChangedBy { it.refresh }
                 // Only react to cases where REFRESH completes i.e., NotLoading.
                 .filter { it.refresh is LoadState.NotLoading }
-                .collect { recyclerView?.scrollToPosition(0) }
+                .collect {
+                    recyclerView?.scrollToPosition(0)
+                    swipeRefreshLayout?.isRefreshing = false
+                }
         }
     }
+
     private fun initAdapter() {
         recyclerView?.adapter =
             adapter.withLoadStateFooter(StocksLoadStateAdapter { adapter.retry() })
@@ -233,7 +232,8 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
             progressBar?.isVisible = loadState.source.refresh is LoadState.Loading
             // Show the retry state if initial load or refresh fails.
 
-            if(loadState.source.refresh is LoadState.Error) {
+            if (loadState.source.refresh is LoadState.Error) {
+                swipeRefreshLayout?.isRefreshing = false
                 btnRetry?.isVisible = true
                 showNoConnectionText()
             } else {
@@ -259,6 +259,7 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
 
     private fun showEmptyList(show: Boolean) {
         if (show) {
+            swipeRefreshLayout?.isRefreshing = false
             tvErrorText?.text = getString(R.string.no_results)
             tvErrorText?.visibility = View.VISIBLE
             recyclerView?.visibility = View.GONE

@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.zelyder.stocksapp.data.LOGO_BASE_URL
 import com.zelyder.stocksapp.data.PAGE_SIZE
+import com.zelyder.stocksapp.data.StocksRemoteMediator
 import com.zelyder.stocksapp.data.mappers.toEntity
 import com.zelyder.stocksapp.data.mappers.toFavoriteStock
 import com.zelyder.stocksapp.data.mappers.toStock
@@ -37,10 +38,15 @@ class StocksListRepositoryImpl(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { StocksPagingSource(localDataSource, fmpDataSource, finnhubDataSource) }
+            pagingSourceFactory = {
+                StocksPagingSource(
+                    localDataSource,
+                    fmpDataSource,
+                    finnhubDataSource,
+                    forceRefresh
+                )
+            }
         ).flow
-
-//        DataSource.getStocks()
     }
 
     override suspend fun updateStocksIsFavoriteAsync(stock: Stock) = withContext(Dispatchers.IO) {
@@ -53,13 +59,13 @@ class StocksListRepositoryImpl(
 
     }
 
-    override fun getFavoritesAsync(): Flow<PagingData<Stock>> {
+    override fun getFavoritesAsync(forceRefresh: Boolean): Flow<PagingData<Stock>> {
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { FavoritesPagingSource(localDataSource, finnhubDataSource) }
+            pagingSourceFactory = { FavoritesPagingSource(localDataSource, finnhubDataSource, forceRefresh) }
         ).flow
     }
 

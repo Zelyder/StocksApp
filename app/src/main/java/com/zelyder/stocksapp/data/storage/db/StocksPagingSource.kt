@@ -19,6 +19,7 @@ class StocksPagingSource(
     private val localDataSource: StocksLocalDataSource,
     private val fmpDataSource: StocksFmpDataSource,
     private val finnhubDataSource: StocksFinnhubDataSource,
+    private val forceRefresh: Boolean,
 ) : PagingSource<Int, Stock>() {
     override fun getRefreshKey(state: PagingState<Int, Stock>): Int? {
         // We need to get the previous key (or next key if previous is null) of the page
@@ -38,7 +39,7 @@ class StocksPagingSource(
             if (stocks.isNullOrEmpty()) {
                 localDataSource.saveStocks(fmpDataSource.getNasdaqConstituent().map {
                     it.toEntity(
-                        StockPriceDto(),//finnhubDataSource.getPriceByTicker(it.symbol),
+                        StockPriceDto(),
                         localDataSource.getFavoriteStockByTicker(it.symbol) != null
                     )
                 })
@@ -48,15 +49,16 @@ class StocksPagingSource(
             var pageStocks: List<Stock> = emptyList()
             if (position-1 < stockChunked.size){
                 pageStocks = stockChunked[position-1]
-                pageStocks.onEach { it.updatePrice(finnhubDataSource.getPriceByTicker(it.ticker)) }
+                if(pageStocks.any{it.price == 0.0f} || forceRefresh) {
+                    pageStocks.onEach { it.updatePrice(finnhubDataSource.getPriceByTicker(it.ticker)) }
+                    localDataSource.updateStocks(pageStocks.map { it.toEntity() })
+                }
             }
 
             val nextKey = if (pageStocks.isEmpty()) {
                 null
             } else {
-                localDataSource.updateStocks(pageStocks.map { it.toEntity() })
-                // initial load size = 3 * NETWORK_PAGE_SIZE
-                // ensure we're not requesting duplicating items, at the 2nd request
+
                 position + (params.loadSize / PAGE_SIZE)
             }
             LoadResult.Page(

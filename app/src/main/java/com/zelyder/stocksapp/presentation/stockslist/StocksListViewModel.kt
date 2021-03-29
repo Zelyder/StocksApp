@@ -44,10 +44,10 @@ class StocksListViewModel(private val stocksListRepository: StocksListRepository
         }
     }
 
-    fun swapToFavTab():Flow<PagingData<Stock>>? {
-        if (_isFavSelected.value == false || _isFavSelected.value == null) {
+    fun swapToFavTab(forceRefresh: Boolean = false):Flow<PagingData<Stock>>? {
+        if (_isFavSelected.value == false || _isFavSelected.value == null || forceRefresh) {
             _isFavSelected.value = true
-            val newResult: Flow<PagingData<Stock>> = stocksListRepository.getFavoritesAsync().cachedIn(viewModelScope)
+            val newResult: Flow<PagingData<Stock>> = stocksListRepository.getFavoritesAsync(forceRefresh).cachedIn(viewModelScope)
             _stocksList = newResult
             return newResult
         }

@@ -5,9 +5,15 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.zelyder.stocksapp.data.mappers.toEntity
+import com.zelyder.stocksapp.data.mappers.toStock
+import com.zelyder.stocksapp.data.mappers.updatePrice
+import com.zelyder.stocksapp.data.network.dto.finnhub.StockPriceDto
 import com.zelyder.stocksapp.data.storage.db.StocksDb
 import com.zelyder.stocksapp.data.storage.entities.RemoteKeysEntity
+import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksFmpDataSource
+import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSource
 import com.zelyder.stocksapp.domain.models.Stock
 import retrofit2.HttpException
 import java.io.IOException
@@ -15,14 +21,14 @@ import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
 class StocksRemoteMediator(
-    private val service: StocksFmpDataSource,
-    private val database: StocksDb
+    private val database: StocksDb,
+    private val fmpDataSource: StocksFmpDataSource,
+    private val finnhubDataSource: StocksFinnhubDataSource
 ) : RemoteMediator<Int, Stock>() {
 
-    //TODO: try to uncomment
-//    override suspend fun initialize(): InitializeAction {
-//        return InitializeAction.LAUNCH_INITIAL_REFRESH
-//    }
+    override suspend fun initialize(): InitializeAction {
+        return InitializeAction.LAUNCH_INITIAL_REFRESH
+    }
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Stock>): MediatorResult {
         val page = when (loadType) {
@@ -49,21 +55,37 @@ class StocksRemoteMediator(
         }
 
         try {
-            val stocks = service.getNasdaqConstituent()
-            val endOfPaginationReached = stocks.isEmpty()
+            var stocks = database.stocksDao().getAllStocks().map { it.toStock() }
+
+            if (stocks.isNullOrEmpty()) {
+                database.stocksDao().addAllStocks(fmpDataSource.getNasdaqConstituent().map {
+                    it.toEntity(
+                        StockPriceDto(),
+                        database.favoriteDao().getStockByTicker(it.symbol) != null
+                    )
+                })
+                stocks = database.stocksDao().getAllStocks().map { it.toStock() }
+            }
+            val stockChunked = stocks.chunked(PAGE_SIZE)
+            var pageStocks: List<Stock> = emptyList()
+            if (page-1 < stockChunked.size){
+                pageStocks = stockChunked[page-1]
+                pageStocks.onEach { it.updatePrice(finnhubDataSource.getPriceByTicker(it.ticker)) }
+            }
+            val endOfPaginationReached = pageStocks.isEmpty() || pageStocks.first().price == 0.0f
             database.withTransaction {
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
                     database.remoteKeysDao().clearRemoteKeys()
-//                    database.reposDao().clearRepos()
+//                    database.stocksDao().deleteAll()
                 }
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = stocks.map {
-//                    RemoteKeysEntity(repoId = it.id, prevKey = prevKey, nextKey = nextKey)
+                    RemoteKeysEntity(ticker = it.ticker, prevKey = prevKey, nextKey = nextKey)
                 }
-//                database.remoteKeysDao().insertAll(keys)
-//                database.reposDao().insertAll(stocks)
+                database.remoteKeysDao().insertAll(keys)
+                database.stocksDao().updateStocks(stocks.map { it.toEntity() })
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {

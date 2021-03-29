@@ -17,7 +17,8 @@ import java.io.IOException
 
 class FavoritesPagingSource(
     private val localDataSource: StocksLocalDataSource,
-    private val finnhubDataSource: StocksFinnhubDataSource
+    private val finnhubDataSource: StocksFinnhubDataSource,
+    private val forceRefresh: Boolean
 ) : PagingSource<Int, Stock>() {
     override fun getRefreshKey(state: PagingState<Int, Stock>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -35,12 +36,14 @@ class FavoritesPagingSource(
             val stockChunked = stocks.chunked(PAGE_SIZE)
             if (position-1 < stockChunked.size){
                 pageStocks = stockChunked[position-1]
-                pageStocks.onEach { it.updatePrice(finnhubDataSource.getPriceByTicker(it.ticker)) }
+                if(pageStocks.any{it.price == 0.0f} || forceRefresh) {
+                    pageStocks.onEach { it.updatePrice(finnhubDataSource.getPriceByTicker(it.ticker)) }
+                    localDataSource.updateFavoritesStock(pageStocks.map { it.toFavoriteStock()})
+                }
             }
             val nextKey = if (pageStocks.isEmpty()) {
                 null
             } else {
-                localDataSource.updateFavoritesStock(pageStocks.map { it.toFavoriteStock()})
                 position + (params.loadSize / PAGE_SIZE)
             }
                 LoadResult.Page(
