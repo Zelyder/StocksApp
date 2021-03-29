@@ -3,7 +3,6 @@ package com.zelyder.stocksapp.presentation.details
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.View
 import android.widget.TextView
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry
@@ -36,7 +35,7 @@ class MyMarkerView(context: Context, layoutResource: Int, val currency: String,v
     private var mOffset: MPPointF? = null
     override fun getOffset(): MPPointF {
         if (mOffset == null) {
-            // center the marker horizontally and vertically
+            // center the marker horizontally
             mOffset = MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
         }
         return mOffset!!

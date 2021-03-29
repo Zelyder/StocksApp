@@ -1,7 +1,6 @@
 package com.zelyder.stocksapp.presentation.details
 
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -9,21 +8,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.ChipGroup
 import com.zelyder.stocksapp.R
-import com.zelyder.stocksapp.domain.models.SelectedItem
+import com.zelyder.stocksapp.domain.enums.SelectedItem
 import com.zelyder.stocksapp.presentation.core.toDeltaString
 import com.zelyder.stocksapp.presentation.core.toPriceString
 import com.zelyder.stocksapp.viewModelFactoryProvider
@@ -90,14 +87,10 @@ class DetailsFragment : Fragment() {
         }
         viewModel.uploadChart(args.stock.ticker, SelectedItem.MONTH)
         cMonth.isChecked = true
-        //TODO: finish web sockets
+        // There should have been a web socket subscription, but something went wrong :(
 //        viewModel.subscribeToSocketEvents(args.stock.ticker)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-//        viewModel.closeSocket()
-    }
 
     private fun initViews(view: View) {
         tvTicker = view.findViewById(R.id.tvTickerDetails)

@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.zelyder.stocksapp.R
 import com.zelyder.stocksapp.presentation.core.hideKeyboard
 import com.zelyder.stocksapp.presentation.core.showKeyboard
@@ -30,7 +28,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             requireActivity().supportFragmentManager.beginTransaction()
                 .add(R.id.search_container, SuggestionsFragment())
                 .commit()
@@ -43,8 +41,7 @@ class SearchFragment : Fragment() {
         searchView?.setOnQueryTextFocusChangeListener { sView, hasFocus ->
             if (hasFocus) {
                 sView.showKeyboard()
-            }
-            else {
+            } else {
                 sView.hideKeyboard()
             }
         }
@@ -70,7 +67,6 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         searchView = null
     }
-
 
 
 }

@@ -5,12 +5,12 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.zelyder.stocksapp.data.PAGE_SIZE
 import com.zelyder.stocksapp.data.mappers.toFavoriteStock
-import com.zelyder.stocksapp.data.storage.db.StocksPagingSource
+import com.zelyder.stocksapp.data.pagingsources.StocksPagingSource
 import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksFmpDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSource
 import com.zelyder.stocksapp.domain.models.Stock
-import com.zelyder.stocksapp.presentation.stockslist.FavoritesPagingSource
+import com.zelyder.stocksapp.data.pagingsources.FavoritesPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext

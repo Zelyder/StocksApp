@@ -4,17 +4,14 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.zelyder.stocksapp.data.PAGE_SIZE
-import com.zelyder.stocksapp.data.mappers.toEntity
 import com.zelyder.stocksapp.data.mappers.toFavoriteStock
-import com.zelyder.stocksapp.data.mappers.toStock
-import com.zelyder.stocksapp.data.storage.db.StocksPagingSource
 import com.zelyder.stocksapp.data.storage.entities.PopularQueriesEntity
 import com.zelyder.stocksapp.data.storage.entities.RecentQueriesEntity
 import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksMboumDataSource
 import com.zelyder.stocksapp.domain.models.Stock
-import com.zelyder.stocksapp.presentation.searchscreen.SearchPagingSource
+import com.zelyder.stocksapp.data.pagingsources.SearchPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -47,6 +44,7 @@ class SearchRepositoryImpl(
 
     override suspend fun saveRecentQuery(query: String)  = withContext(Dispatchers.IO){
         val queries = localDataSource.getRecentQueries()
+        // Limiting the number of stored recent requests
         if(queries.size > QUERY_LIMIT) {
             localDataSource.deleteRecentQuery(queries.last())
         }

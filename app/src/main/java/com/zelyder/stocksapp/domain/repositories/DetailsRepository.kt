@@ -1,7 +1,7 @@
 package com.zelyder.stocksapp.domain.repositories
 
 import com.zelyder.stocksapp.data.network.SocketUpdate
-import com.zelyder.stocksapp.domain.models.SelectedItem
+import com.zelyder.stocksapp.domain.enums.SelectedItem
 import com.zelyder.stocksapp.domain.models.StockCandle
 import kotlinx.coroutines.channels.Channel
 

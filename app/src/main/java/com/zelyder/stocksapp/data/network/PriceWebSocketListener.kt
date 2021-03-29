@@ -1,7 +1,6 @@
 package com.zelyder.stocksapp.data.network
 
 import android.util.Log
-import com.zelyder.stocksapp.data.network.dto.finnhub.LastPriceDto
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
@@ -17,7 +16,6 @@ class PriceWebSocketListener(val ticker: String): WebSocketListener() {
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         super.onOpen(webSocket, response)
-        //webSocket.send("{\"type\":\"subscribe\",\"symbol\":\"$ticker\"}")
         Log.d(this::class.simpleName, "onOpen: $response")
 
     }

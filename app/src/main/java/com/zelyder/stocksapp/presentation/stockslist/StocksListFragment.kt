@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -231,7 +229,6 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
             // Show loading spinner during initial load or refresh.
             progressBar?.isVisible = loadState.source.refresh is LoadState.Loading
             // Show the retry state if initial load or refresh fails.
-
             if (loadState.source.refresh is LoadState.Error) {
                 swipeRefreshLayout?.isRefreshing = false
                 btnRetry?.isVisible = true
@@ -241,7 +238,7 @@ class StocksListFragment : Fragment(), StockListItemClickListener {
                 hideNoConnectionText()
             }
 
-            // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
+            // Toast on any error
             val errorState = loadState.source.append as? LoadState.Error
                 ?: loadState.source.prepend as? LoadState.Error
                 ?: loadState.append as? LoadState.Error

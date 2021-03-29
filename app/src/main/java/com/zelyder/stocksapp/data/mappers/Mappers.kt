@@ -3,7 +3,6 @@ package com.zelyder.stocksapp.data.mappers
 import com.zelyder.stocksapp.data.LOGO_BASE_URL
 import com.zelyder.stocksapp.data.network.dto.finnhub.FoundStockDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockCandlesDto
-import com.zelyder.stocksapp.data.network.dto.finnhub.StockInfoDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockPriceDto
 import com.zelyder.stocksapp.data.network.dto.fmp.NasdaqConstituentDto
 import com.zelyder.stocksapp.data.network.dto.mboum.MostActivesStockDto
@@ -89,7 +88,6 @@ fun FavoriteEntity.toStock() = Stock(
         dayDeltaPercent = this.dayDeltaPercent,
         isFavorite = this.isFavorite
 )
-//FIXME: missed currency
 fun FoundStockDto.toStock(priceDto: StockPriceDto, isFavorite: Boolean):Stock {
         val delta = priceDto.current - priceDto.previousClose
         return Stock(

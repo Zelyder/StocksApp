@@ -1,10 +1,8 @@
 package com.zelyder.stocksapp.data.storage.dao
 
-import androidx.paging.PagingSource
 import androidx.room.*
 import com.zelyder.stocksapp.data.storage.DbContract
 import com.zelyder.stocksapp.data.storage.entities.FavoriteEntity
-import com.zelyder.stocksapp.data.storage.entities.StockEntity
 
 @Dao
 interface FavoriteDao {

@@ -31,6 +31,7 @@ class StocksListAdapter(private val itemClickListener: StockListItemClickListene
     }
 
     override fun onBindViewHolder(holder: StocksViewHolder, position: Int) {
+        //change the background color of every second element
         if (position % 2 != 0) {
             val typedValue = TypedValue()
             holder.cvItem.context.theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true)
