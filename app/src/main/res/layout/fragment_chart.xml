@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.details.ChartFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCurrentPriceDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                tools:text="$131.93" />
+
+            <TextView
+                android:id="@+id/tvDayDeltaDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                android:textColor="@color/green"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="+$0.12 (1,15%)" />
+
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="260dp" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cgScaleChart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="16dp"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/cDay"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chart_scale_d"
+                    app:chipEndPadding="12dp"
+                    app:chipStartPadding="12dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/cWeek"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chart_scale_w"
+                    app:chipEndPadding="12dp"
+                    app:chipStartPadding="12dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/cMonth"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chart_scale_m"
+                    app:chipEndPadding="12dp"
+                    app:chipStartPadding="12dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/cSixMonths"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chart_scale_6m"
+                    app:chipEndPadding="12dp"
+                    app:chipStartPadding="12dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/cYear"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chart_scale_1y"
+                    app:chipEndPadding="12dp"
+                    app:chipStartPadding="12dp" />
+
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBuy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="20dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
+            tools:text="Buy for $132.04" />
+    </LinearLayout>
+
+</ScrollView>
