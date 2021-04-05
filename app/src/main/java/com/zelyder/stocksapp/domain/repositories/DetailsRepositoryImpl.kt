@@ -1,5 +1,6 @@
 package com.zelyder.stocksapp.domain.repositories
 
+import com.zelyder.stocksapp.data.mappers.toNews
 import com.zelyder.stocksapp.data.mappers.toRatios
 import com.zelyder.stocksapp.data.mappers.toStockCandle
 import com.zelyder.stocksapp.data.network.SocketUpdate
@@ -8,6 +9,7 @@ import com.zelyder.stocksapp.domain.datasources.StocksFinnhubDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksFmpDataSource
 import com.zelyder.stocksapp.domain.datasources.StocksLocalDataSource
 import com.zelyder.stocksapp.domain.enums.SelectedItem
+import com.zelyder.stocksapp.domain.models.News
 import com.zelyder.stocksapp.domain.models.Ratio
 import com.zelyder.stocksapp.domain.models.StockCandle
 import kotlinx.coroutines.Dispatchers
@@ -75,6 +77,10 @@ class DetailsRepositoryImpl @ExperimentalCoroutinesApi constructor(
 
     override suspend fun getRatios(ticker: String): List<Ratio> = withContext(Dispatchers.IO){
         fmpDataSource.getRatios(ticker)[0].toRatios()
+    }
+
+    override suspend fun getNews(ticker: String): List<News> = withContext(Dispatchers.IO){
+        fmpDataSource.getNews(ticker).map { it.toNews() }
     }
 
 

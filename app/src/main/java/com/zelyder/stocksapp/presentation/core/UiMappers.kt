@@ -3,6 +3,8 @@ package com.zelyder.stocksapp.presentation.core
 import android.content.res.Resources
 import com.zelyder.stocksapp.R
 import com.zelyder.stocksapp.domain.models.Ratio
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -67,6 +69,8 @@ fun Long.toDate(showTime: Boolean = false): String {
         simpleDateFormat.format(Date(this))
     }
 }
+
+
 
 fun Ratio.fillWithData(resources: Resources):Ratio {
     this.value = String.format("%.2f", this.value).toDouble()

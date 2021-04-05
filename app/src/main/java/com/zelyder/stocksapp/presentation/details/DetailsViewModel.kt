@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zelyder.stocksapp.domain.enums.SelectedItem
+import com.zelyder.stocksapp.domain.models.News
 import com.zelyder.stocksapp.domain.models.Ratio
 import com.zelyder.stocksapp.domain.models.StockCandle
 import com.zelyder.stocksapp.domain.repositories.DetailsRepository
@@ -28,6 +29,9 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository): ViewMo
     private val _ratios = MutableLiveData<List<Ratio>>()
     val ratios: LiveData<List<Ratio>> get() = _ratios
 
+    private val _news = MutableLiveData<List<News>>()
+    val news: LiveData<List<News>> get() = _news
+
 
     override fun onCleared() {
         viewModelScope.launch(coroutineExceptionHandler) {
@@ -42,9 +46,16 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository): ViewMo
         }
     }
 
+    // FIXME: On newer versions android does not return data
     fun uploadRatios(ticker: String, resources: Resources) {
         viewModelScope.launch(coroutineExceptionHandler) {
             _ratios.value = detailsRepository.getRatios(ticker).map { it.fillWithData(resources) }
+        }
+    }
+
+    fun uploadNews(ticker: String) {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            _news.value = detailsRepository.getNews(ticker)
         }
     }
 

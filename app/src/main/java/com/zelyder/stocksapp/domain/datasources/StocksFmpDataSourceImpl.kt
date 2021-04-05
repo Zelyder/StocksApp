@@ -3,6 +3,7 @@ package com.zelyder.stocksapp.domain.datasources
 import com.zelyder.stocksapp.data.FMP_API_KEY
 import com.zelyder.stocksapp.data.network.apis.FmpApi
 import com.zelyder.stocksapp.data.network.dto.fmp.NasdaqConstituentDto
+import com.zelyder.stocksapp.data.network.dto.fmp.NewsDto
 import com.zelyder.stocksapp.data.network.dto.fmp.RatiosDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,5 +15,9 @@ class StocksFmpDataSourceImpl(private val fmpApi: FmpApi): StocksFmpDataSource {
 
     override suspend fun getRatios(ticker: String): List<RatiosDto> = withContext(Dispatchers.IO){
         fmpApi.getRatios(apiKey = FMP_API_KEY, ticker = ticker)
+    }
+
+    override suspend fun getNews(ticker: String): List<NewsDto>  = withContext(Dispatchers.IO){
+        fmpApi.getNews(apiKey = FMP_API_KEY, ticker = ticker, limit = 10)
     }
 }

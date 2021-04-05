@@ -6,10 +6,12 @@ import com.zelyder.stocksapp.data.network.dto.finnhub.FoundStockDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockCandlesDto
 import com.zelyder.stocksapp.data.network.dto.finnhub.StockPriceDto
 import com.zelyder.stocksapp.data.network.dto.fmp.NasdaqConstituentDto
+import com.zelyder.stocksapp.data.network.dto.fmp.NewsDto
 import com.zelyder.stocksapp.data.network.dto.fmp.RatiosDto
 import com.zelyder.stocksapp.data.network.dto.mboum.MostActivesStockDto
 import com.zelyder.stocksapp.data.storage.entities.FavoriteEntity
 import com.zelyder.stocksapp.data.storage.entities.StockEntity
+import com.zelyder.stocksapp.domain.models.News
 import com.zelyder.stocksapp.domain.models.Ratio
 import com.zelyder.stocksapp.domain.models.Stock
 import com.zelyder.stocksapp.domain.models.StockCandle
@@ -154,3 +156,5 @@ fun RatiosDto.toRatios(): List<Ratio> {
     dividendPerShare?.let {ratios.add( Ratio(name = "dividendPerShare", value =  it))}
     return ratios
 }
+
+fun NewsDto.toNews() = News(symbol, publishedDate, title, image, site, text, url)
