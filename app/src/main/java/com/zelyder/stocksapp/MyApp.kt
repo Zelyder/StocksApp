@@ -54,7 +54,7 @@ class MyApp : Application(), ViewModelFactoryProvider {
             StocksListRepositoryImpl(fmpDataSource, finnhubDataSource, localDataSource)
         searchRepository = SearchRepositoryImpl(mboumDataSource, finnhubDataSource, localDataSource)
         detailsRepository =
-            DetailsRepositoryImpl(finnhubDataSource, localDataSource, WebServicesProvider())
+            DetailsRepositoryImpl(finnhubDataSource, fmpDataSource, WebServicesProvider())
     }
 
     override fun viewModelFactory(): ViewModelFactory = viewModelFactory

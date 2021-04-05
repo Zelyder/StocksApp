@@ -2,6 +2,7 @@ package com.zelyder.stocksapp.presentation.core
 
 import android.content.res.Resources
 import com.zelyder.stocksapp.R
+import com.zelyder.stocksapp.domain.models.Ratio
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -65,6 +66,33 @@ fun Long.toDate(showTime: Boolean = false): String {
         val simpleDateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         simpleDateFormat.format(Date(this))
     }
+}
+
+fun Ratio.fillWithData(resources: Resources):Ratio {
+    this.value = String.format("%.2f", this.value).toDouble()
+    when(name) {
+        "currentRatio" -> {
+            this.name =  resources.getString(R.string.current_ratio)
+            this.description = resources.getString(R.string.current_ratio_disc)
+        }
+        "peRatio" -> {
+            this.name =  resources.getString(R.string.pe_ratio)
+            this.description = resources.getString(R.string.pe_ratio_disc)
+        }
+        "priceToSalesRatio" -> {
+            this.name =  resources.getString(R.string.price_to_sales_ratio)
+            this.description = resources.getString(R.string.price_to_sales_ratio_disc)
+        }
+        "priceBookValueRatio" -> {
+            this.name =  resources.getString(R.string.price_book_value_ratio)
+            this.description = resources.getString(R.string.price_book_value_ratio_disc)
+        }
+        "dividendPerShare" -> {
+            this.name =  resources.getString(R.string.dividend_per_share)
+            this.description = resources.getString(R.string.dividend_per_share_disc)
+        }
+    }
+    return this
 }
 
 

@@ -22,4 +22,11 @@
     <string name="chart_scale_all">Все</string>
     <string name="btn_retry_text">Повторить</string>
     <string name="no_results">Нет результатов 😓</string>
+    <string name="current_ratio">Коэффициент ликвидности</string>
+    <string name="current_ratio_disc">Коэффициент ликвидности</string>
+    <string name="pe_ratio_disc">Цена / Прибыль</string>
+    <string name="price_to_sales_ratio_disc">Цена / Продажи</string>
+    <string name="price_book_value_ratio_disc">"Цена / Балансовая стоимость "</string>
+    <string name="dividend_per_share">Дивиденды</string>
+    <string name="dividend_per_share_disc">Дивиденды на акцию</string>
 </resources>

@@ -11,7 +11,7 @@ class ViewPagerAdapter(fragment: Fragment, val stock: Stock) : FragmentStateAdap
     override fun createFragment(position: Int): Fragment {
         return when(position) {
             0 -> ChartFragment.newInstance(stock)
-            1 -> SummaryFragment.newInstance()
+            1 -> SummaryFragment.newInstance(stock.ticker)
             2 -> NewsFragment.newInstance()
             else -> throw IllegalArgumentException("$position is not registered tab")
         }

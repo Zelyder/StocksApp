@@ -5,4 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".presentation.details.SummaryFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRatios"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </FrameLayout>

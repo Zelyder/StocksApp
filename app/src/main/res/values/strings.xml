@@ -25,5 +25,15 @@
     <string name="tab_summary">Summary</string>
     <string name="btn_retry_text">Retry</string>
     <string name="no_results">No results 😓</string>
+    <string name="current_ratio">Current ratio</string>
+    <string name="current_ratio_disc">Current ratio</string>
+    <string name="pe_ratio" translatable="false">P/E</string>
+    <string name="pe_ratio_disc">Price/Earnings</string>
+    <string name="price_to_sales_ratio" translatable="false">P/S</string>
+    <string name="price_to_sales_ratio_disc">Price/Sales</string>
+    <string name="price_book_value_ratio" translatable="false">P/BV</string>
+    <string name="price_book_value_ratio_disc">Price/Book Value</string>
+    <string name="dividend_per_share">Dividends</string>
+    <string name="dividend_per_share_disc">Dividends per share</string>
 
 </resources>
